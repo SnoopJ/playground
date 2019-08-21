@@ -9,6 +9,7 @@ import numpy as np
 
 df = pd.DataFrame(
     {
+        "ID": [1000, 1001, 1005, 1337, 1578],
         "first_name": ["Jason", "Molly", "Tina", "Jake", "Amy"],
         "last_name": ["Miller", "Jacobson", "Ali", "Milner", "Cooze"],
         "age": [42, 52, 36, 24, 73],
@@ -17,4 +18,13 @@ df = pd.DataFrame(
     }
 )
 
-print("pandas loaded as `pd`, example DataFrame initialized as `df`")
+df2 = pd.DataFrame(
+    {
+        "ID": [1000, 1001, 1005, 1337, 1578, 1298],
+        "first_name": ["Jason", "Molly", "Tina", "Jake", "Amy", "Robert"],
+        "last_name": ["Miller", "Jacobson", "Ali", "Milner", "Cooze", "'); DROP TABLE Students;"],
+        "remarks": ["cool", "very cool", "chill", "definitely not a shark", "finite entity", "what's up with that name?!"]
+    }
+)
+
+print("pandas loaded as `pd`, example DataFrames initialized as `df` and `df2`")
