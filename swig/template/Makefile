@@ -1,13 +1,17 @@
 all: lib wrap test
 
 lib:
-	g++ -fPIC -c foo.cpp
-	g++ -fPIC foo.o -o foo
+	g++ -std=c++17 -fPIC -c foo.cpp
+	g++ -std=c++17 -fPIC foo.o -o foo
 
-wrap:
+wrap: generate_wrapper build_wrapper
+
+generate_wrapper:
 	swig -python -c++ foo.i
-	g++ -fPIC -c -I/home/jgerity/.pyenv/versions/3.6.9/include/python3.6m foo_wrap.cxx
-	g++ -shared foo.o foo_wrap.o -o _foo.so
+
+build_wrapper:
+	g++ -std=c++17 -fPIC -c -I/home/jgerity/.pyenv/versions/3.6.10/include/python3.6m foo_wrap.cxx
+	g++ -std=c++17 -shared foo.o foo_wrap.o -o _foo.so
 
 test:
 	pytest --tb=line test_foo.py
@@ -15,8 +19,8 @@ test:
 clean:
 	rm -fr __pycache__
 	rm -f foo \
-              foo.o \
-	      foo_wrap.cxx \
-	      foo_wrap.o \
-	      _foo.so \
-	      foo.py
+		  foo.o \
+		  foo_wrap.cxx \
+		  foo_wrap.o \
+		  _foo.so \
+		  foo.py
