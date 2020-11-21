@@ -14,7 +14,7 @@ build_wrapper:
 	g++ -std=c++17 -shared foo.o foo_wrap.o -o _foo.so
 
 test:
-	pytest --tb=line test_foo.py
+	pytest -s --tb=line test_foo.py
 
 clean:
 	rm -fr __pycache__
