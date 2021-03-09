@@ -12,24 +12,28 @@ Sample output:
 
 $ python3.9 keyerror_gives_keys.py
 Traceback (most recent call last):
-  File "/home/snoopjedi/playground/keyerror_gives_keys.py", line 130, in <module>
+  File "/home/snoopjedi/playground/keyerror_gives_keys.py", line 131, in <module>
     (wrongdict + d
 KeyError: 'baz'
 
 --- DICT KEY HELPER ---
 Keys for d:
 ---
-foo     fzgpa   giwap   qhzbd   apbs    ikpte   pjr     fnx     chvaj   gpwqd
-ukrq    tnf     fsl     mvxqt   hjacq   jih     mqn     jckmq   izg     hslt
-haewk   yzxa    kzymq   igz     eqxp    xldgy   dcwg    uxzw    mpnj    pgxqo
-zhuti   tmyrf   kiuom   doae    ldgin   qoeia   eym     qrzbl   qje     rfna
-fozxg   ezhqa   kyfog   nqlj    mrv     vcwoh   gkr     zpts    wqryh   uwqt
-cta     kes     ardu    ojai    eotpc   amrq    oar     xvsn    mtb     syt
-fzihg   fbxh    mqzn    tkme    nzda    zsc     noj     qmd     tyo     upet
-vzj     ctspw   frxoe   quceo   uokyb   wsg     ihac    ngp     fpcqo   ydk
-ihpgv   zsjvd   pnrd    qspn    upm     nueot   vfx     csyb    ghz     gvznm
-asp     azeq    fecsu   zyk     mgu     twq     blnum   pxb     mngdk   xfu
-hpo
+foo     wiux    onh     mei     nfkp    fyx     mqcdf   ktnz    hlg     ftzdg
+fibg    twbkf   als     kgxsf   zpesw   cpk     ibhpn   fou     maxg    kphvf
+jugr    xlu     wanoz   whqva   szku    wjyl    mhvog   zyp     kdna    ejabd
+zceng   rpm     grhn    imr     jhvoy   atq     hrg     srtu    zoc     tsgxw
+tsw     nascv   muc     vidw    hifu    sibud   dys     zdtva   qsz     feuj
+ybftq   fpcem   nuw     sbu     qrsuz   caq     tckd    pbax    afjx    zsdy
+ojkmw   uin     qeswh   yncsj   kiaj    swq     kosae   oyr     edasy   uvb
+hcv     skoew   wznvg   jvue    xflnu   ktq     cjxg    nrw     rbhxk   qds
+bekc    fbcj    ouja    zwy     pcxe    igha    jlzpa   hli     azd     pyso
+svlw    orv     eatz    mdon    soehk   mlpaz   gab     rwtz    jefw    vpy
+dhj     322     453     496     999     224     70      526     889     882
+314     433     134     147     1020    699     135     946     319     118
+613     71      321     18      444     952     790     835     945     383
+845     603     727     647     46      814     961     750     286     878
+442     615     127
 ---
 
 """
@@ -123,7 +127,8 @@ import string
 wrongdict = {k:v for k,v in (random.sample(range(1024), k=2) for _ in range(100))}
 d = {
         "foo": "bar",
-        **{''.join(random.sample(string.ascii_lowercase, k=random.randint(3, 5))): -1 for _ in range(100)}
+        **{''.join(random.sample(string.ascii_lowercase, k=random.randint(3, 5))): -1 for _ in range(100)},
+        **{k: -1 for k in random.sample(range(1024), k=42)}
         }
 
 # a syntactically-pathological indexing operation that raises a KeyError
