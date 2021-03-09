@@ -4,7 +4,32 @@ how it'd be nice to just see the keys available in an object when you fail to
 index something.
 
 This code is specific to dicts, but the approach could probably be generalized
-to handle other mapping types.
+to handle other mapping types. This helper will only succeed in the case where
+the KeyError is originating from code like `dict_name[key_name]`. In these
+cases, the compiled CPython will be something like:
+
+```
+N-4 LOAD_NAME                0 (dict_name)
+N-2 LOAD_NAME                1 (key_name)
+  N BINARY_SUBSCR
+```
+
+and the operations on the stack will be simple enough that we can just look two
+instructions behind the failing offset (`N`) and get the name of the thing the
+user tried to index.
+
+Once the name of the target of the subscript operation is known, we can check
+the locals for the originating frame if we pass `capture_locals=True` to
+`TracebackException.from_exception`. The tricky part is to figure out exactly
+which name you want to look up in the locals, hence the specific dependence on
+the instructions executed immediately before the one that raised the exception.
+
+My first attempt at this hook was based on using `tokenize` on the offending
+line of code and resolving any `NAME`s against frame locals. In hindsight,
+maybe that would do a lot better than this solution for indexing operations of
+the form `dict_name[key_expr]`. It might even be possible to figure out which
+of those `NAME`s is the desired one, but I abandoned that approach. Some other
+time, maybe? :)
 
 Written for Python 3.9
 
