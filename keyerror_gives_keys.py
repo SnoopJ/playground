@@ -7,6 +7,31 @@ This code is specific to dicts, but the approach could probably be generalized
 to handle other mapping types.
 
 Written for Python 3.9
+
+Sample output:
+
+$ python3.9 keyerror_gives_keys.py
+Traceback (most recent call last):
+  File "/home/snoopjedi/playground/keyerror_gives_keys.py", line 130, in <module>
+    (wrongdict + d
+KeyError: 'baz'
+
+--- DICT KEY HELPER ---
+Keys for d:
+---
+foo     fzgpa   giwap   qhzbd   apbs    ikpte   pjr     fnx     chvaj   gpwqd
+ukrq    tnf     fsl     mvxqt   hjacq   jih     mqn     jckmq   izg     hslt
+haewk   yzxa    kzymq   igz     eqxp    xldgy   dcwg    uxzw    mpnj    pgxqo
+zhuti   tmyrf   kiuom   doae    ldgin   qoeia   eym     qrzbl   qje     rfna
+fozxg   ezhqa   kyfog   nqlj    mrv     vcwoh   gkr     zpts    wqryh   uwqt
+cta     kes     ardu    ojai    eotpc   amrq    oar     xvsn    mtb     syt
+fzihg   fbxh    mqzn    tkme    nzda    zsc     noj     qmd     tyo     upet
+vzj     ctspw   frxoe   quceo   uokyb   wsg     ihac    ngp     fpcqo   ydk
+ihpgv   zsjvd   pnrd    qspn    upm     nueot   vfx     csyb    ghz     gvznm
+asp     azeq    fecsu   zyk     mgu     twq     blnum   pxb     mngdk   xfu
+hpo
+---
+
 """
 import ast
 import dis
@@ -19,6 +44,10 @@ from typing import Any, Sequence
 from pprint import pprint
 
 
+class KeyHelperException(Exception):
+    pass
+
+
 def gimmekeys(exctype: type[Exception], value: Exception, tb: TracebackType):
     """Exception handler """
     # first, whatever normally happens (usually printing the traceback)
@@ -29,7 +58,10 @@ def gimmekeys(exctype: type[Exception], value: Exception, tb: TracebackType):
     # then, our custom logic
     if issubclass(exctype, KeyError):
         print("\n--- DICT KEY HELPER ---")
-        _report_keys(exctype, value, tb)
+        try:
+            _report_keys(exctype, value, tb)
+        except KeyHelperException as exc:
+            print(*exc.args)
 
     return result
 
@@ -37,8 +69,7 @@ def gimmekeys(exctype: type[Exception], value: Exception, tb: TracebackType):
 def _report_keys(exctype: type[KeyError], value: KeyError, tb: TracebackType) -> bool:
     """Try to report the keys in the object associated with the failing indexing operation"""
     def _fail(msg: str):
-        print(msg)
-        return False
+        raise KeyHelperException(msg)
     frame = tb.tb_frame
     lastop = tb.tb_lasti
     code = frame.f_code
@@ -46,11 +77,13 @@ def _report_keys(exctype: type[KeyError], value: KeyError, tb: TracebackType) ->
     instrs = list(dis.get_instructions(code))
     # find the index of the opcode that failed
     instr_num, failing_op = next((num, i) for num, i in enumerate(instrs) if i.offset == tb.tb_lasti)
-    if failing_op.opname != "BINARY_SUBSCR": _fail(f"Sorry, only know how to handle exceptions raised from a BINARY_SUBSCR opcode, got {failing_op.opname=}")
+    prev = instrs[instr_num-1]  # hopefully an instruction that just pushed a key
+    pprev = instrs[instr_num-2]  # hopefully an instruction that just pushed a name associated with a target object
+    if (failing_op.opname != "BINARY_SUBSCR" or not all(op.opname.startswith("LOAD_") for op in [pprev, prev])):
+        _fail(f"Only know how to handle a BINARY_SUBSCR preceded by two LOAD_* ops, got: {pprev.opname}, {prev.opname}, {failing_op.opname}")
+    key, target = prev, pprev
 
-    key = instrs[instr_num-1]  # top of stack (TOS) is whatever the key is
-    target = instrs[instr_num-2]  # TOS-1 is the target
-    if target.opname != "LOAD_NAME": _fail(f"Sorry, only know how to handle LOAD_NAME targets for BINARY_SUBSCR, got: {target.opname=} at {target.offset=}")
+    if target.opname != "LOAD_NAME": _fail(f"only know how to handle LOAD_NAME targets for BINARY_SUBSCR, got: {target.opname=} at {target.offset=}")
 
     tbexc = traceback.TracebackException.from_exception(value, capture_locals=True)
     varz = tbexc.stack[0].locals
@@ -66,8 +99,6 @@ def _report_keys(exctype: type[KeyError], value: KeyError, tb: TracebackType) ->
             _fail(f"Exception {exc=} while trying to get keys from object of {type(obj)=}")
     else:
         _fail(f"Object exceeds {MAXLEN=} characters, skipping...")
-
-    return True
 
 
 def _maybe_report_keys(obj: Any, name: str):
@@ -102,3 +133,8 @@ d = {
 
         ]
         )
+
+# these examples will NOT work, but shouldn't fail any harder than the KeyError would have:
+
+# {1: 2}[42]  # indexing a dict literal
+# x="z"; d = {"foo": "bar"}; d["ba" + x]  # indexing with an expression
