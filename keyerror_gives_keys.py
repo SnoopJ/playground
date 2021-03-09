@@ -149,12 +149,14 @@ sys.excepthook = gimmekeys  # install our custom hook, which will run for all un
 import random
 import string
 
+# a red herring dictionary to demonstrate that we can ignore irrelevant data on the failing line
 wrongdict = {k:v for k,v in (random.sample(range(1024), k=2) for _ in range(100))}
+
 d = {
-        "foo": "bar",
-        **{''.join(random.sample(string.ascii_lowercase, k=random.randint(3, 5))): -1 for _ in range(100)},
-        **{k: -1 for k in random.sample(range(1024), k=42)}
-        }
+    "foo": "bar",
+    **{''.join(random.sample(string.ascii_lowercase, k=random.randint(3, 5))): -1 for _ in range(100)},
+    **{k: -1 for k in random.sample(range(1024), k=42)}
+}
 
 # a syntactically-pathological indexing operation that raises a KeyError
 (wrongdict + d
