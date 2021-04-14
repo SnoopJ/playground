@@ -15,7 +15,7 @@
 #endif
     Py_ssize_t* size;
     const char* data = PyUnicode_AsUTF8AndSize($input, size);
-    $1 = std::string_view(data, *size);
+    $1 = std::string(data, *size);
 }
 
 %typemap(freearg) std::string_view {}  // no cleanup needed, we only use the stack
@@ -23,6 +23,7 @@
 // NOTE:20210413:This assumes UTF-8 encoding
 %typemap(out) std::string_view
 {
+    PyErr_WarnEx(PyExc_UserWarning, "Making a copy of a view, changes to the underlying string will NOT be visible", 1);
     $result = PyUnicode_FromStringAndSize($1.data(), $1.size());
 }
 

@@ -7,9 +7,17 @@ void print_it(std::string_view s)
 	std::cout << s << std::endl;
 }
 
+std::string kSharedStr = "猫 nyaa";
+
 std::string_view get_it()
 {
-	return "猫 nyaa";
+	return kSharedStr;
+}
+
+void modify_it()
+{
+	kSharedStr.erase(0,2);
+	kSharedStr.push_back('!');
 }
 
 int main(int argv, char** argc)
