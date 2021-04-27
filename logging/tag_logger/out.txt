@@ -1,0 +1,51 @@
+14:01 [snoopjedi@denton ~/playground/logging/tag_logger (master *)]
+$ python3 demo.py
+Created logger of type <class 'logtag.TagLogger'>
+
+⭐TagFilter(tags={'Tag3', 'Tag2', 'Tag1'}, pass_untagged=False)
+==============
+[DEBUG:Tag1] Known tag, with implicit level
+[ERROR:Tag1] Known tag, with explicit level
+
+[DEBUG:Tag2] Known tag, with implicit level
+[ERROR:Tag2] Known tag, with explicit level
+
+[DEBUG:Tag3] Known tag, with implicit level
+[ERROR:Tag3] Known tag, with explicit level
+
+
+⭐TagFilter(tags={'Tag3', 'Tag2', 'Tag1'}, pass_untagged=True)
+==============
+[DEBUG:Tag1] Known tag, with implicit level
+[ERROR:Tag1] Known tag, with explicit level
+
+[DEBUG:Tag2] Known tag, with implicit level
+[ERROR:Tag2] Known tag, with explicit level
+
+[DEBUG:Tag3] Known tag, with implicit level
+[ERROR:Tag3] Known tag, with explicit level
+
+[INFO:<NO TAG>] Untagged INFO message
+[DEBUG:<NO TAG>] Untagged DEBUG message
+
+
+⭐TagFilter(tags={'Tag1'}, pass_untagged=False)
+==============
+[DEBUG:Tag1] Known tag, with implicit level
+[ERROR:Tag1] Known tag, with explicit level
+
+
+⭐TagFilter(tags={'Tag2'}, pass_untagged=False)
+==============
+[DEBUG:Tag2] Known tag, with implicit level
+[ERROR:Tag2] Known tag, with explicit level
+
+
+⭐TagFilter(tags={'Tag2', 'Tag1'}, pass_untagged=False)
+==============
+[DEBUG:Tag1] Known tag, with implicit level
+[ERROR:Tag1] Known tag, with explicit level
+
+[DEBUG:Tag2] Known tag, with implicit level
+[ERROR:Tag2] Known tag, with explicit level
+
