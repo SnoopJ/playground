@@ -1,12 +1,12 @@
 """
 Based on a question in Freenode #python on 11 May 2021
 """
-from typing import Optional
+from typing import Iterable
 
 import numpy as np
 
 
-def common_rows(a: np.ndarray, b: np.ndarray, debug: bool=False) -> Optional[tuple[int, int]]:
+def common_rows(a: np.ndarray, b: np.ndarray, debug: bool=False) -> Iterable[tuple[int, int]]:
     """
     Yields the indices of combinations of equal rows in `a, b`
 
