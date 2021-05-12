@@ -10,6 +10,17 @@ def common_rows(a: np.ndarray, b: np.ndarray, debug: bool=False) -> Iterable[tup
     """
     Yields the indices of combinations of equal rows in `a, b`
 
+    Uses the `nditer` interface [1] in `"external_loop"` mode [2] to iterate
+    over all combinations of rows (i.e. entries along the first axis),
+    performing comparisons as we go. This function is semantically equivalent
+    to
+
+        ```
+        (a[:, np.newaxis] == b).all(axis=-1).any(axis=0)
+        ```
+
+    but the performance characteristics are very different (see Notes)
+
     Parameters
     ----------
     a, b: np.ndarray
@@ -24,20 +35,22 @@ def common_rows(a: np.ndarray, b: np.ndarray, debug: bool=False) -> Iterable[tup
 
     Notes
     -----
-    Uses the `nditer` interface [1] in `"external_loop"` mode [2] to iterate over all
-    combinations of rows (i.e. entries along the first axis), performing comparisons
-    as we go. This function is equivalent to
+    This function does not create the intermediate values implied in the
+    equivalent idiom given above. In particular, the broadcast and equality
+    comparison above always requires `O(N*M)` space, where this function should
+    (hopefully?) only use a constant amount of memory, regardless of the input
+    sizes. It's still `O(N*M)` in time, and it is slower than a Cythonized
+    counterpart [3] would be because of the Python loop embedded in it (I got
+    ~50k iter/sec. on a single 2.2 GHz core).
 
-        ```
-        (a[:, np.newaxis] == b).all(axis=-1).any(axis=0)
-        ```
+    A better approach to the problem _"do these arrays share any rows?"_ might be:
+        1) sort both of the inputs in-place
+        2) perform a simultaneous scan of the inputs, advancing whichever
+           iterator corresponds to the smaller row whenever the rows are unequal,
+           and advancing both when they are
 
-    **except** that this function does not create the intermediate values implied
-    above. In particular, the broadcast and equality comparison above always requires
-    O(N*M) space, where this function should (hopefully?) only use a constant amount
-    of memory, regardless of the input sizes. It's still O(N*M) in time, and it is
-    slower than a Cythonized counterpart [3] would be because of the Python loop embedded
-    in it (I got ~50k iter/sec. on a single 2.2 GHz core)
+    If I'm not mistaken, the time complexity of that could be bounded by
+    `O(N*lg(N) + M*lg(M))` without introducing memory overhead.
 
     References
     ----------
@@ -50,7 +63,8 @@ def common_rows(a: np.ndarray, b: np.ndarray, debug: bool=False) -> Iterable[tup
     if not compatible:
         raise ValueError(f"Expected arrays of shape (N, C), (M, C), got: {a.shape}, {b.shape}")
 
-    # this mapping of axes advances fastest along `b`, see: https://numpy.org/devdocs/reference/arrays.nditer.html#outer-product-iteration
+    # this mapping of axes advances fastest along `b`, see:
+    # https://numpy.org/devdocs/reference/arrays.nditer.html#outer-product-iteration
     axes_a = (0, -1, 1)
     axes_b = (-1, 0, 1)
     it = np.nditer(
@@ -84,7 +98,7 @@ if __name__ == "__main__":
     # choose a random row from arr2 and replace a random row of arr1 with it,
     # to guarantee that we have an overlap. These calls to randint() are NOT
     # deterministic, so that we get different results on each run
-    # NOTE: it's possible that the random match we create comes after some other naturally-occurring match
+    # NOTE: naturally-occurring matches are also possible
     idx1 = np.random.randint(N)
     idx2 = np.random.randint(M)
     print(f"Guaranteeing at least a match between rows {idx1} and {idx2}")
