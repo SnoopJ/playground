@@ -36,7 +36,6 @@ References
 [3] https://docs.python.org/3/library/json.html
 """
 import json
-from pprint import pprint  # pretty printer
 
 # this is a valid JSON document, but it contains the key "data" twice!
 doc = """
@@ -61,7 +60,7 @@ print("document:")
 print(doc)
 
 print("naive_parse:")
-pprint(naive_parse)  # {'data': [4, 5, 6]}
+print(naive_parse)  # {'data': [4, 5, 6]}
 
 print("extended_parse:")
-pprint(extended_parse)  #  {'data': [1, 2, 3, 4, 5, 6]}
+print(extended_parse)  #  {'data': [1, 2, 3, 4, 5, 6]}
