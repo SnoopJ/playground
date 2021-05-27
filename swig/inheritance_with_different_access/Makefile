@@ -1,4 +1,4 @@
-PYTHON_INCLUDE := $(shell python3 -c "from distutils.sysconfig import get_python_inc; print(get_python_inc())")
+PYTHON_INCLUDE := $(shell python3 -c "from sysconfig import get_path; print(get_path('include'))")
 
 all: lib wrap test
 
