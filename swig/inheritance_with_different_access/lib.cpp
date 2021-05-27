@@ -4,5 +4,5 @@
 int main(int argc, char** argv)
 {
     Foo f;
-	std::cout << "Before set: " << f.get_data() << "\n";
+    std::cout << "Before set: " << f.get_data() << "\n";
 }

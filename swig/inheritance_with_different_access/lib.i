@@ -37,17 +37,17 @@
 
 %inline %{
 class FooWrap : public Foo {
-	public:
-		// C++11 would allow us to inherit Foo's constructor(s) by declaring
-		// `using Foo::Foo` here, but SWIG can't keep track of that and codegen
-		// goes awry. So instead we have to explicitly declare the deferral of
-		// each constructor to the base class
-		FooWrap() : Foo() {};
-		FooWrap(int val) : Foo(val) {};
+    public:
+        // C++11 would allow us to inherit Foo's constructor(s) by declaring
+        // `using Foo::Foo` here, but SWIG can't keep track of that and codegen
+        // goes awry. So instead we have to explicitly declare the deferral of
+        // each constructor to the base class
+        FooWrap() : Foo() {};
+        FooWrap(int val) : Foo(val) {};
 
-		void set_data(int val) {
-			std::cout << "Inside derived setter\n";
-			Foo::set_data(val);
-		}
+        void set_data(int val) {
+            std::cout << "Inside derived setter\n";
+            Foo::set_data(val);
+        }
 };
 %}
