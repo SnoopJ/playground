@@ -1,0 +1,21 @@
+15:08 [snoopjedi@denton ~/playground/attrs (master *)]
+$ python3 pick_class.py
+Traceback (most recent call last):
+  File "/home/snoopjedi/playground/attrs/pick_class.py", line 16, in <module>
+    PickFoo = pick_class(Foo, ('x', 'z'))
+  File "/home/snoopjedi/playground/attrs/pick_class.py", line 14, in pick_class
+    return attr.make_class(f"Pick{cls.__name__}", picked)
+  File "/home/snoopjedi/.pyenv/versions/3.9.1/lib/python3.9/site-packages/attr/_make.py", line 2706, in make_class
+    return _attrs(these=cls_dict, **attributes_arguments)(type_)
+  File "/home/snoopjedi/.pyenv/versions/3.9.1/lib/python3.9/site-packages/attr/_make.py", line 1292, in wrap
+    builder = _ClassBuilder(
+  File "/home/snoopjedi/.pyenv/versions/3.9.1/lib/python3.9/site-packages/attr/_make.py", line 604, in __init__
+    attrs, base_attrs, base_map = _transform_attrs(
+  File "/home/snoopjedi/.pyenv/versions/3.9.1/lib/python3.9/site-packages/attr/_make.py", line 485, in _transform_attrs
+    own_attrs = [
+  File "/home/snoopjedi/.pyenv/versions/3.9.1/lib/python3.9/site-packages/attr/_make.py", line 486, in <listcomp>
+    Attribute.from_counting_attr(
+  File "/home/snoopjedi/.pyenv/versions/3.9.1/lib/python3.9/site-packages/attr/_make.py", line 2394, in from_counting_attr
+    validator=ca._validator,
+AttributeError: 'Attribute' object has no attribute '_validator'
+

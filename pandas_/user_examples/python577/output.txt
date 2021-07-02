@@ -1,0 +1,4 @@
+12:38 [snoopjedi@denton ~/playground/pandas/user_examples (master)]
+$ python3 altered.py
+ASSIGN S2_UM.TCS.SIS5_01.JK + ~S5_02.JK + ~S5_03.JK + ~S5_04.JK + ~CO5_01.JK + ~CO5_02.JK + ~CO5_03.JK + ~CO5_04.JK + ~SH18_12.JK + ~SH16_12.JK + ~SH7_01.JK + ~SH7_02.JK + ~SH7_03.JK + ~SH7_04.JK + ~SH14_12.JK + ~SH12_12 TO ASSIGN S2_UM.TCS.SIJK;
+
