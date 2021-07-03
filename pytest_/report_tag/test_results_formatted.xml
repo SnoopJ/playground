@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testsuites>
+  <testsuite name="pytest" errors="0" failures="0" skipped="0" tests="5" time="0.143" timestamp="2021-07-02T21:48:50.132619" hostname="denton">
+    <testcase classname="test_suite_example" name="test_foo_baseline" time="0.003">
+      <properties>
+        <property name="this is what" value="junit can do"/>
+        <property name="but it's kinda" value="limited, especially"/>
+        <property name="when storing structred data like" value="{'foo': 42}"/>
+      </properties>
+    </testcase>
+    <testcase classname="test_suite_example" name="test_foo_augmented[1]" time="0.003">
+      <custom_tag_empty/>
+      <custom_tag_with_data foo="42" bar="-1" baz="O frabjous day!"/>
+    </testcase>
+    <testcase classname="test_suite_example" name="test_foo_augmented[2]" time="0.002">
+      <custom_tag_empty/>
+      <custom_tag_with_data foo="42" bar="-1" baz="O frabjous day!"/>
+    </testcase>
+    <testcase classname="test_suite_example" name="test_foo_augmented[3]" time="0.002">
+      <custom_tag_empty/>
+      <custom_tag_with_data foo="42" bar="-1" baz="O frabjous day!"/>
+    </testcase>
+    <testcase classname="test_suite_example" name="test_foo_augmented_by_element" time="0.002">
+      <custom_tag_empty/>
+      <custom_tag_via_ElementTree foo="42"/>
+      <custom_tag_tree>
+        <a bar="-1">
+          <b>
+            <c someattrib="someval"/>
+            <d>
+              <item num="0" running_sum="0"/>
+              <item num="1" running_sum="1"/>
+              <item num="2" running_sum="3"/>
+              <item num="3" running_sum="6"/>
+              <item num="4" running_sum="10"/>
+              <item num="5" running_sum="15"/>
+              <item num="6" running_sum="21"/>
+              <item num="7" running_sum="28"/>
+              <item num="8" running_sum="36"/>
+              <item num="9" running_sum="45"/>
+              <comment depth="pretty deep, right?"/>
+            </d>
+          </b>
+        </a>
+      </custom_tag_tree>
+    </testcase>
+  </testsuite>
+</testsuites>
