@@ -1,2 +1,9 @@
 __pycache__
 *.pyc
+
+**/.direnv
+
+*.wav
+*.png
+*.jpg
+*.gif
