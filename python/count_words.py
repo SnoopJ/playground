@@ -1,3 +1,6 @@
+"""
+Based on a question in Freenode #python on 15 April 2021
+"""
 from pathlib import Path
 from collections import Counter
 import random
