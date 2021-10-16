@@ -5,7 +5,7 @@ import subprocess
 from resource import setrlimit, RLIMIT_CORE, RLIM_INFINITY
 import typing as t
 
-from _madvise import madvise, _dontdump
+from _madvise import madvise, _madv_dontdump
 
 def fork_and_abort():
     pid = os.fork()
@@ -60,21 +60,24 @@ if __name__ == "__main__":
     dump("core1", outdir=outpth)
     print("---")
 
-    print("Importing PyTorch")
-    # pull in torch, which has an appreciable memory footprint
-    import torch
+    print("calling libfoo")
+    # allocate and populate a bunch of memory with libfoo
+    import ctypes
+    libfoo = ctypes.CDLL(Path('libfoo.so').resolve())
+    libfoo.randvec.restypes = (ctypes.c_void_p,)
+    result = libfoo.randvec(1_000_000)
+    print(hex(result))
 
-    print("--- Second dump: baseline with torch")
+    print("--- Second dump: baseline with libfoo")
     dump("core2", outdir=outpth)
     print("---")
-
     # set MADV_DONTDUMP for memory mapped by the named libraries
     # scans /proc/<pid>/maps, identifies zero-offset maps with these prefixex, calls madvise()
     # this *should* exclude the relevant libraries from produced core dumps...
-    _dontdump(["libtorch", "libopenblas*"])
+    _madv_dontdump(["libfoo"])
 
     # ... but it doesn't seem to
-    print("--- Third dump: MADV_DONTDUMP libtorch*")
+    print("--- Third dump: MADV_DONTDUMP")
     dump("core3", outdir=outpth)
     print("---")
 
@@ -82,6 +85,6 @@ if __name__ == "__main__":
     setrlimit(RLIMIT_CORE, (100_000_000, 100_000_000))
 
     # ...which also appears to do nothing
-    print("Fourth dump: MADV_DONTDUMP libtorch* and RLIMIT_CORE=100 MB")
+    print("Fourth dump: MADV_DONTDUMP and RLIMIT_CORE=100 MB")
     dump("core4", outdir=outpth)
     print("---")

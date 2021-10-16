@@ -41,7 +41,7 @@ def madvise(start: int, size: int, advice: EMADVAdvice, comment: str="", allow_u
             raise OSError(f"madvise() returned error {errname} ({errcode})")
 
 
-def _dontdump(prefixes: t.Sequence[str]) -> None:
+def _madv_dontdump(prefixes: t.Sequence[str]) -> None:
     for mp in _mmaps():
         deny = any(mp.objfile.startswith(pre) for pre in prefixes)
         if mp.offset != 0:
