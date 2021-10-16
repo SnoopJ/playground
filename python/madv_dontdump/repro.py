@@ -84,7 +84,7 @@ if __name__ == "__main__":
     # nuclear option: tell the kernel to produce a core file NO LARGER than 100 MB...
     setrlimit(RLIMIT_CORE, (100_000_000, 100_000_000))
 
-    # ...which also appears to do nothing
+    # ...which does work, sorta.
     print("Fourth dump: MADV_DONTDUMP and RLIMIT_CORE=100 MB")
     dump("core4", outdir=outpth)
     print("---")
