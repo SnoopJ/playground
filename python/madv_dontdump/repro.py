@@ -72,7 +72,7 @@ if __name__ == "__main__":
     dump("core2", outdir=outpth)
     print("---")
     # set MADV_DONTDUMP for memory mapped by the named libraries
-    # scans /proc/<pid>/maps, identifies zero-offset maps with these prefixex, calls madvise()
+    # scans /proc/<pid>/maps, identifies zero-offset maps with these prefixes, calls madvise()
     # this *should* exclude the relevant libraries from produced core dumps...
     _madv_dontdump(["libfoo"])
 
