@@ -51,7 +51,7 @@ main(int argc, char** argv)
 	}
 
 	// buffer views hold a reference to the object that created them, release it
-	PyBuffer_Release(buf);
+	PyBuffer_Release(&buf);
 	// don't forget the reference we own from calling PyRun_String() !
 	Py_DECREF(v);
 	return 0;
