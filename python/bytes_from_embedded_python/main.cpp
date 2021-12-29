@@ -50,11 +50,12 @@ main(int argc, char** argv)
 		std::cout << "#" << i << "\t" << ((std::uint8_t*)buf.buf)[i] << "\n";
 	}
 
+	// buffer views hold a reference to the object that created them, release it
+	PyBuffer_Release(buf);
 	// don't forget the reference we own from calling PyRun_String() !
 	Py_DECREF(v);
 	return 0;
 
 error:
-	std::cout << "Bailing out\n";
 	return -1;
 }
