@@ -35,11 +35,18 @@ main(int argc, char** argv)
 		goto error;
 	}
 
+
+	err = PyObject_CheckBuffer(v);
+	if (!err)
+	{
+		std::cout << "Object does not implement the buffer protocol\n";
+		goto error;
+	}
 	// retrieve the associated buffer
 	err = PyObject_GetBuffer(v, &buf, 0);
 	if (err != 0)
 	{
-		std::cout << "Bad buffer! (error " << err << ")\n";
+		std::cout << "PyObject_GetBuffer() encountered an error (" << err << ")\n";
 		goto error;
 	}
 
