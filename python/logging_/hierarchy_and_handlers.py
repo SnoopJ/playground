@@ -1,12 +1,12 @@
 from logging import getLogger, StreamHandler, Formatter
 import sys
 
-hout_leaf = StreamHandler(sys.stdout)
 fmt_leaf = Formatter("LEAF: %(message)s")
+hout_leaf = StreamHandler(sys.stdout)
 hout_leaf.setFormatter(fmt_leaf)
 
-hout_root = StreamHandler(sys.stdout)
 fmt_root = Formatter("ROOT: %(message)s")
+hout_root = StreamHandler(sys.stdout)
 hout_root.setFormatter(fmt_root)
 
 herr = StreamHandler(sys.stderr)
