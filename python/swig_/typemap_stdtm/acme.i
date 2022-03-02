@@ -23,7 +23,7 @@
 
     std::tm t{};
     t.tm_mday = PyDateTime_GET_DAY(obj);
-    t.tm_mon = PyDateTime_GET_MONTH(obj);
+    t.tm_mon = PyDateTime_GET_MONTH(obj) - 1;
     t.tm_year = PyDateTime_GET_YEAR(obj) - 1900;
 
     if (PyDateTime_Check(obj))
