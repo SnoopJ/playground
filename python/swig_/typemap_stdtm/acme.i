@@ -10,13 +10,13 @@
 #include <datetime.h>
 %}
 
-%typemap(typecheck) std::tm&
+%typemap(typecheck) std::tm
 {
     PyDateTime_IMPORT;
     $1 = PyDateTime_Check($input) || PyDate_Check($input);
 }
 
-%typemap(in) std::tm&
+%typemap(in) std::tm
 {
     PyDateTime_IMPORT;
     PyDateTime_DateTime* obj = (PyDateTime_DateTime*)$input;
@@ -42,7 +42,7 @@
     $1 = t;
 }
 
-%typemap(out) std::tm&
+%typemap(out) std::tm
 {
     PyDateTime_IMPORT;
     $result = PyDateTime_FromDateAndTime(
@@ -55,7 +55,5 @@
         0  // microseconds, which std::tm does not represent
     );
 }
-
-%apply std::tm& { std::tm };
 
 %include "acme.hpp"
