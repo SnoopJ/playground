@@ -14,6 +14,7 @@ import subprocess
 import sys
 from configparser import ConfigParser
 from pathlib import Path
+import typing
 
 from packaging.requirements import Requirement
 
@@ -22,7 +23,7 @@ HERE = Path(__file__).parent.resolve()
 SETUP_CFG = HERE.parent.joinpath("setup.cfg")
 
 
-def _requirements(cfg_file: Path):
+def _requirements(cfg_file: Path) -> List[Requirement]:
     """Parse a setuptools setup.cfg and extract a list of Requirements corresponding to install_requires"""
     if not cfg_file.exists():
         raise RuntimeError(f"File does not exist: {cfg_file}")
