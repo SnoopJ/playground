@@ -5,7 +5,7 @@ import pytest
 from main import good_run, bad_run
 
 
-def _mock_call_names(mock):
+def _mock_call_names(mock: Mock):
     return [kall[0] for kall in mock.mock_calls]
 
 
