@@ -1,0 +1,12 @@
+$ ./main
+Python 3.9.9 (main, Jul 20 2022, 22:51:22)
+[GCC 9.4.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+(InteractiveConsole)
+>>> x
+42
+>>> Path
+<class 'pathlib.Path'>
+>>>
+now exiting InteractiveConsole...
+
