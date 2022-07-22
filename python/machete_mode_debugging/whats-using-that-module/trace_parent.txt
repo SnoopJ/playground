@@ -1,0 +1,78 @@
+### Calls to modules={'__main__', 'os', 'multiprocessing', 'pathlib'} in order
+#
+pathlib:joinpath(L966) — def joinpath(self, *args):
+pathlib:_make_child(L736) — def _make_child(self, args):
+pathlib:_parse_args(L682) — @classmethod
+pathlib:parse_parts(L64) — def parse_parts(self, parts):
+pathlib:splitroot(L303) — def splitroot(self, part, sep=sep):
+pathlib:join_parsed_parts(L102) — def join_parsed_parts(self, drv, root, parts, drv2, root2, parts2):
+pathlib:_from_parsed_parts(L715) — @classmethod
+pathlib:_init(L1089) — def _init(self,
+pathlib:mkdir(L1318) — def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+pathlib:__fspath__(L752) — def __fspath__(self):
+pathlib:__str__(L742) — def __str__(self):
+pathlib:_format_parsed_parts(L725) — @classmethod
+pathlib:is_dir(L1434) — def is_dir(self):
+pathlib:stat(L1227) — def stat(self):
+pathlib:__fspath__(L752) — def __fspath__(self):
+pathlib:__str__(L742) — def __str__(self):
+pathlib:joinpath(L966) — def joinpath(self, *args):
+pathlib:_make_child(L736) — def _make_child(self, args):
+pathlib:_parse_args(L682) — @classmethod
+pathlib:parse_parts(L64) — def parse_parts(self, parts):
+pathlib:splitroot(L303) — def splitroot(self, part, sep=sep):
+pathlib:join_parsed_parts(L102) — def join_parsed_parts(self, drv, root, parts, drv2, root2, parts2):
+pathlib:_from_parsed_parts(L715) — @classmethod
+pathlib:_init(L1089) — def _init(self,
+pathlib:write_text(L1278) — def write_text(self, data, encoding=None, errors=None):
+pathlib:open(L1246) — def open(self, mode='r', buffering=-1, encoding=None,
+pathlib:__fspath__(L752) — def __fspath__(self):
+pathlib:__str__(L742) — def __str__(self):
+pathlib:_format_parsed_parts(L725) — @classmethod
+pathlib:_opener(L1118) — def _opener(self, name, flags, mode=0o666):
+pathlib:__fspath__(L752) — def __fspath__(self):
+pathlib:__str__(L742) — def __str__(self):
+multiprocessing.process:__init__(L80) — def __init__(self, group=None, target=None, name=None, args=(), kwargs={},
+multiprocessing.process:name(L189) — @property
+multiprocessing.process:<genexpr>(L94) — ':'.join(str(i) for i in self._identity)
+multiprocessing.process:<genexpr>(L94) — ':'.join(str(i) for i in self._identity)
+multiprocessing.process:start(L110) — def start(self):
+multiprocessing.process:_check_closed(L99) — def _check_closed(self):
+multiprocessing.process:_cleanup(L61) — def _cleanup():
+multiprocessing.context:_Popen(L222) — @staticmethod
+multiprocessing.context:get_context(L233) — def get_context(self, method=None):
+multiprocessing.context:_Popen(L274) — @staticmethod
+multiprocessing.popen_fork:<module>(L1) — import os
+multiprocessing.util:<module>(L10) — import os
+multiprocessing.util:_platform_supports_abstract_sockets(L108) — def _platform_supports_abstract_sockets():
+multiprocessing.util:Finalize(L182) — class Finalize(object):
+multiprocessing.util:ForkAwareThreadLock(L368) — class ForkAwareThreadLock(object):
+multiprocessing.util:ForkAwareLocal(L385) — class ForkAwareLocal(threading.local):
+multiprocessing.popen_fork:Popen(L12) — class Popen(object):
+multiprocessing.popen_fork:__init__(L15) — def __init__(self, process_obj):
+multiprocessing.util:_flush_std_streams(L433) — def _flush_std_streams():
+multiprocessing.popen_fork:_launch(L62) — def _launch(self, process_obj):
+multiprocessing.util:__init__(L186) — def __init__(self, obj, callback, args=(), kwargs=None, exitpriority=None):
+multiprocessing.process:join(L142) — def join(self, timeout=None):
+multiprocessing.process:_check_closed(L99) — def _check_closed(self):
+multiprocessing.popen_fork:wait(L36) — def wait(self, timeout=None):
+multiprocessing.popen_fork:poll(L24) — def poll(self, flag=os.WNOHANG):
+__main__:myfunc(L12) — def myfunc(pth: Path):
+__main__:other(L16) — def other(pth: Path):
+__main__:<listcomp>(L17) — return [p.name for p in pth.glob("**/*")]
+pathlib:glob(L1166) — def glob(self, pattern):
+pathlib:parse_parts(L64) — def parse_parts(self, parts):
+pathlib:splitroot(L303) — def splitroot(self, part, sep=sep):
+pathlib:_make_selector(L486) — def _make_selector(pattern_parts, flavour):
+pathlib:__init__(L583) — def __init__(self, pat, child_parts, flavour):
+pathlib:__init__(L507) — def __init__(self, child_parts, flavour):
+pathlib:_make_selector(L486) — def _make_selector(pattern_parts, flavour):
+pathlib:_is_wildcard_pattern(L51) — def _is_wildcard_pattern(pat):
+pathlib:__init__(L552) — def __init__(self, pat, child_parts, flavour):
+pathlib:compile_pattern(L324) — def compile_pattern(self, pattern):
+pathlib:__init__(L507) — def __init__(self, child_parts, flavour):
+pathlib:select_from(L516) — def select_from(self, parent_path):
+pathlib:is_dir(L1434) — def is_dir(self):
+pathlib:stat(L1227) — def stat(self):
+pathlib:__fspath__(L752) — def __fspath__(self):
+pathlib:__str__(L742) — def __str__(self):
