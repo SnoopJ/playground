@@ -36,7 +36,7 @@ def make_grid(videos, cls=NetworkVideoTarget):
     width = len(videos[0])
 
     base_address = int(IPv4Address("192.168.0.0"))  # arbitrary, we'll offset from here
-    
+
     grid = dict()
     for nrow, row in enumerate(videos):
         for ncol, vid in enumerate(row):
@@ -65,7 +65,7 @@ if __name__ == "__main__":
     pprint(videos)
 
     print("---")
-    
+
     attrs_grid = make_grid(videos)
     print("attrs grid:")
     pprint(attrs_grid)

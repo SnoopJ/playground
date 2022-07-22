@@ -1,3 +1,3 @@
-import foo
+from . import foo
 
 print(foo.secret)

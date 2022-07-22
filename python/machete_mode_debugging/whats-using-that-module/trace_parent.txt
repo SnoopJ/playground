@@ -1,4 +1,4 @@
-### Calls to modules={'__main__', 'os', 'multiprocessing', 'pathlib'} in order
+### Calls to modules={'pathlib', 'os', '__main__', 'multiprocessing'} in order
 #
 pathlib:joinpath(L966) — def joinpath(self, *args):
 pathlib:_make_child(L736) — def _make_child(self, args):

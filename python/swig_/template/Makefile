@@ -1,3 +1,4 @@
+PYTHON_INCLUDE := $(shell python3 -c "from sysconfig import get_path; print(get_path('include'))")
 all: lib wrap test
 
 lib:
@@ -10,7 +11,7 @@ generate_wrapper:
 	swig -python -c++ foo.i
 
 build_wrapper:
-	g++ -std=c++17 -fPIC -c -I/home/jgerity/.pyenv/versions/3.6.10/include/python3.6m foo_wrap.cxx
+	g++ -std=c++17 -fPIC -c -I$(PYTHON_INCLUDE) foo_wrap.cxx
 	g++ -std=c++17 -shared foo.o foo_wrap.o -o _foo.so
 
 test:

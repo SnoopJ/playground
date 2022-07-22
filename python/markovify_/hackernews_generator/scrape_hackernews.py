@@ -81,6 +81,7 @@ if __name__ == "__main__":
         print(f"Story #{story} has comments")
         corpus += [munge_comment(c).split() for c in fetch_comments(story)]
 
+    # corpus = [["A", "list", "of", "sentences"], ...]
     model = markovify.Chain(corpus, state_size=3)
     with open(f'hn_markov_{time.time()}.json', 'w') as f:
         f.write(model.to_json())

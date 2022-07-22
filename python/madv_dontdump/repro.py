@@ -1,3 +1,5 @@
+import argparse
+import logging
 import os
 from pathlib import Path
 import shutil
@@ -6,6 +8,9 @@ from resource import setrlimit, RLIMIT_CORE, RLIM_INFINITY
 import typing as t
 
 from _madvise import madvise, _madv_dontdump
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--verbose", action="store_true")
 
 def fork_and_abort():
     pid = os.fork()
@@ -49,6 +54,9 @@ def dump(outfn: str, outdir: t.Optional[Path]=None):
 
 
 if __name__ == "__main__":
+    args = parser.parse_args()
+    if args.verbose:
+        logging.basicConfig(level=logging.DEBUG)
     # set nonzero core limit so a core dump is produced on abort
     setrlimit(RLIMIT_CORE, (RLIM_INFINITY, RLIM_INFINITY))
 

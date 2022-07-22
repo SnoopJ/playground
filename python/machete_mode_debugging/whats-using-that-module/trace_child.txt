@@ -1,4 +1,4 @@
-### Calls to modules={'__main__', 'os', 'multiprocessing', 'pathlib'} in order
+### Calls to modules={'pathlib', 'os', '__main__', 'multiprocessing'} in order
 #
 __main__:other(L16) — def other(pth: Path):
 __main__:<listcomp>(L17) — return [p.name for p in pth.glob("**/*")]
@@ -24,45 +24,6 @@ pathlib:_iterate_directories(L586) — def _iterate_directories(self, parent_pat
 pathlib:_select_from(L556) — def _select_from(self, parent_path, is_dir, exists, scandir):
 pathlib:__fspath__(L752) — def __fspath__(self):
 pathlib:__str__(L742) — def __str__(self):
-pathlib:_make_child_relpath(L1098) — def _make_child_relpath(self, part):
-pathlib:_from_parsed_parts(L715) — @classmethod
-pathlib:_init(L1089) — def _init(self,
-pathlib:_select_from(L530) — def _select_from(self, parent_path, is_dir, exists, scandir):
-pathlib:__hash__(L789) — def __hash__(self):
-pathlib:_cparts(L775) — @property
-pathlib:casefold_parts(L321) — def casefold_parts(self, parts):
-pathlib:name(L831) — @property
-pathlib:glob(L1178) — yield p
-pathlib:_select_from(L613) — yield p
-pathlib:__hash__(L789) — def __hash__(self):
-pathlib:_select_from(L576) — yield p
-pathlib:_select_from(L531) — yield parent_path
-pathlib:_make_child_relpath(L1098) — def _make_child_relpath(self, part):
-pathlib:_from_parsed_parts(L715) — @classmethod
-pathlib:_init(L1089) — def _init(self,
-pathlib:_select_from(L530) — def _select_from(self, parent_path, is_dir, exists, scandir):
-pathlib:__hash__(L789) — def __hash__(self):
-pathlib:_cparts(L775) — @property
-pathlib:casefold_parts(L321) — def casefold_parts(self, parts):
-pathlib:name(L831) — @property
-pathlib:glob(L1178) — yield p
-pathlib:_select_from(L613) — yield p
-pathlib:__hash__(L789) — def __hash__(self):
-pathlib:_select_from(L576) — yield p
-pathlib:_select_from(L531) — yield parent_path
-pathlib:_make_child_relpath(L1098) — def _make_child_relpath(self, part):
-pathlib:_from_parsed_parts(L715) — @classmethod
-pathlib:_init(L1089) — def _init(self,
-pathlib:_select_from(L530) — def _select_from(self, parent_path, is_dir, exists, scandir):
-pathlib:__hash__(L789) — def __hash__(self):
-pathlib:_cparts(L775) — @property
-pathlib:casefold_parts(L321) — def casefold_parts(self, parts):
-pathlib:name(L831) — @property
-pathlib:glob(L1178) — yield p
-pathlib:_select_from(L613) — yield p
-pathlib:__hash__(L789) — def __hash__(self):
-pathlib:_select_from(L576) — yield p
-pathlib:_select_from(L531) — yield parent_path
 pathlib:_make_child_relpath(L1098) — def _make_child_relpath(self, part):
 pathlib:_from_parsed_parts(L715) — @classmethod
 pathlib:_init(L1089) — def _init(self,
@@ -164,19 +125,6 @@ pathlib:_select_from(L556) — def _select_from(self, parent_path, is_dir, exist
 pathlib:__fspath__(L752) — def __fspath__(self):
 pathlib:__str__(L742) — def __str__(self):
 pathlib:_format_parsed_parts(L725) — @classmethod
-pathlib:_make_child_relpath(L1098) — def _make_child_relpath(self, part):
-pathlib:_from_parsed_parts(L715) — @classmethod
-pathlib:_init(L1089) — def _init(self,
-pathlib:_select_from(L530) — def _select_from(self, parent_path, is_dir, exists, scandir):
-pathlib:__hash__(L789) — def __hash__(self):
-pathlib:_cparts(L775) — @property
-pathlib:casefold_parts(L321) — def casefold_parts(self, parts):
-pathlib:name(L831) — @property
-pathlib:glob(L1178) — yield p
-pathlib:_select_from(L613) — yield p
-pathlib:__hash__(L789) — def __hash__(self):
-pathlib:_select_from(L576) — yield p
-pathlib:_select_from(L531) — yield parent_path
 pathlib:_make_child_relpath(L1098) — def _make_child_relpath(self, part):
 pathlib:_from_parsed_parts(L715) — @classmethod
 pathlib:_init(L1089) — def _init(self,

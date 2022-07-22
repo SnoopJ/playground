@@ -19,7 +19,7 @@ class TransformableTarFile(tarfile.TarFile):
     """
     A subclass to support arbitrary transformations on the structure of the output,
     akin to the --transform argument to GNU tar
-    """  
+    """
     def extract(self, member, path="", set_attrs=True, *, numeric_owner=False, transform=None):
       """
       Adapted from the original method. If a callable `transform` is specified, 
@@ -27,7 +27,7 @@ class TransformableTarFile(tarfile.TarFile):
       """
       if callable(transform):
           member = transform(member)
-      
+
       if not member: return
 
       super().extract(member=member, path=path, set_attrs=set_attrs, numeric_owner=numeric_owner)
@@ -66,7 +66,7 @@ print(f'Before extraction, state of file is:\n{list(f)}\n')
 # didn't want to bother.
 
 # try changing this transformation or writing your own!
-tr = tr1  
+tr = tr1
 if tr in (tr1, tr2):
   print(f'Using the transformation s/{re.escape(tr.pattern)}/{re.escape(tr.repl)}/\n-----')
 elif tr == tr3:

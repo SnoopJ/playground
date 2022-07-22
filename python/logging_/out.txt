@@ -1,10 +1,15 @@
-============================= test session starts ==============================
-platform linux -- Python 3.6.10, pytest-6.2.2, py-1.10.0, pluggy-0.13.1
-rootdir: /home/snoopjedi/playground/logging
-collected 1 item
+$ python3 formatting_perf.py
+All values given for repeat=100, number=10000
 
-does_pytest_squelch_nonroot_loggers.py ROOT
-CHILD
-.
+Logging level INFO
+-----
+f-string way: 5.68e-03 sec
+logging way: 4.13e-03 sec
+Relative difference: 31.8%
 
-============================== 1 passed in 0.01s ===============================
+Logging level DEBUG (may take a little while)
+-----
+f-string way: 1.65e-01 sec
+logging way: 1.81e-01 sec
+Relative difference: 9.2%
+

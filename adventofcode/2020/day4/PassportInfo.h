@@ -242,7 +242,7 @@ namespace Acme
                 auto [key, value] = getPair(subs);
                 acc.set(key, value);
 
-                L = R+1;
+                L = R;
                 R = line.find(" ", L+1);
             }
             if (L != R)

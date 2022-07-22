@@ -3,7 +3,7 @@
 from pathlib import Path
 import multiprocessing
 
-from trace import who_is_calling
+from tracer import who_is_calling
 
 
 HERE = Path(__file__).parent.resolve()

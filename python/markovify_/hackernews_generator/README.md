@@ -1,22 +1,16 @@
-## HackerNews n-gram Markov generator
+## Markov n-gram model
 
-### Using this generator
+### Usage
 
 ```
-$ python3 -m venv hackernews_generator_venv && source hackernews_generator_venv/bin/activate
+$ python3 -m venv hn_markov && source hn_markov/bin/activate
 $ python3 -m pip install -r requirements.txt
-$ python3 scrape_hackernews.py
+$ python3 scrape_hackernews.py  # and wait for a bit
 $ python3 generate_sentences.py <path to .json>
 ```
 
-### More information
+### Details
 
-* `generate_sentences.py` is a program that, given a corpus built from scraping
-  HackerNews, will use a [Markov Chain](https://en.wikipedia.org/wiki/Markov_chain)
-  model to generate sentence, using the excellent library [`markovify`](https://github.com/jsvine/markovify)
-
-* `scrape_hackernews.py` is a program that will scrape HackerNews to build a
-  corpus for user with `generate_sentences.py`.
-
-
-These programs are kind of hard to read in their current form. Sorry about that!
+This is a little [Markov chain](https://en.wikipedia.org/wiki/Markov_chain)
+sentence generator built on a corpus learned by scraping HackerNews posts for
+comments, using the excellent library [`markovify`](https://github.com/jsvine/markovify).

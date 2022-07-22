@@ -14,5 +14,5 @@ mod = module_from_spec(spec)  # NOTE: creates an empty module
 spec.loader.exec_module(mod)  # NOTE: populate that module by executing the target's code
 
 print(mod)
-print(f"{mod.x=}")
-print(f"{mod.func(1)=}")
+print(f"mod.x = {mod.x}")
+print(f"mod.func(1) = {mod.func(1)}")

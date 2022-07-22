@@ -3,6 +3,7 @@ import click
 def require(*opts: str):
     """Require a Click flag to be set"""
     def _validate(ctx, param, value):
+        print(param, ctx.params)
         if value:
             for opt in opts:
                 if not ctx.params.get(opt):
