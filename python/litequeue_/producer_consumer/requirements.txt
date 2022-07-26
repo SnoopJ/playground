@@ -1,0 +1,5 @@
+fastapi
+litequeue
+pydantic
+requests
+uvicorn
