@@ -20,10 +20,12 @@ class Consumer:
 
     @property
     def stats(self):
+        # Thanks to StackOverflow user taryn for an example query showing how to
+        # get multiple counts with a single execution: https://stackoverflow.com/a/12789493
         total, locked, done = next(self._queue.conn.execute("""
             SELECT COUNT(*) AS total,
                    sum(case when status = 1 then 1 else 0 end) AS locked,
-                   sum(case when status = 2 then 1 else 0 end) as done
+                   sum(case when status = 2 then 1 else 0 end) AS done
             FROM Queue
             """))
         return total, locked, done
