@@ -105,10 +105,20 @@ PID = PROC.pid
 
 
 def _dummy_list(lo=1_000_000, hi=100_000_000):
+    """
+    Make a dummy list that consumes about half of an arena
+    """
     return [random.randint(lo, hi) for _ in range(NUM_INTS)]
 
 
 def _dump_alloc_info(filename, do_print=True):
+    """
+    Helper to call ``sys._debugmallocstats()``, sending the output to
+    a file instead of directly to stderr.
+
+    If ``do_print`` is enabled, print out the lines from the debug info
+    that have information about the arenas and unused pools.
+    """
     with open(filename, "w") as f:
         oldstderr = os.dup(2)
         # replace stderr for a bit
