@@ -1,0 +1,26 @@
+{
+    "valid_users": [
+        {
+            "name": "Alice",
+            "favorite_color": "Orange"
+        },
+        {
+            "name": "Bob",
+            "favorite_color": "Purple"
+        },
+        {
+            "name": "Charlie",
+            "favorite_color": "Blue"
+        }
+    ],
+    "invalid_users": [
+        {
+            "name": "",
+            "favorite_color": ""
+        },
+        {
+            "name": "Invalid",
+            "favorite_color": "Impossible"
+        }
+    ]
+}
