@@ -1,0 +1,59 @@
+$ gdb -q main
+Reading symbols from main...
+(gdb) start
+Temporary breakpoint 1 at 0x503e9: file main.c, line 6.
+Starting program: /home/snoopjedi/playground/python/internals/tuples_and_lists/main
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+Temporary breakpoint 1, main () at main.c:6
+6       {
+(gdb) until 46
+C sizes:
+---
+sizeof(PyTupleObject) = 32  <----------------------------------------------------,
+sizeof(PyListObject) = 40                                                         |
+                                                                                  |
+Python sizes:                                                                     |
+---                                                                               |
+sizeof(tup) = 56                                                                  |
+sizeof(lst) = 72                                                                  |
+main () at main.c:46                                                              |
+46          return 0;                                                             |
+(gdb) print tup                                                                   |
+$1 = (PyTupleObject *) 0x7ffff7869c40                                             v
+(gdb) x/40bx tup    <--- NOTE: here we are listing 8 more bytes than the actual size of the struct
+0x7ffff7869c40: 0x01    0x00    0x00    0x00    0x00    0x00    0x00    0x00  \
+0x7ffff7869c48: 0xe0    0x6c    0x8b    0x55    0x55    0x55    0x00    0x00   -- PyObject_VAR_HEAD
+0x7ffff7869c50: 0x02    0x00    0x00    0x00    0x00    0x00    0x00    0x00  /
+0x7ffff7869c58: 0x30    0x07    0x92    0xf7    0xff    0x7f    0x00    0x00  |-- PyObject* (111) (ob_item)
+0x7ffff7869c60: 0x50    0x15    0x92    0xf7    0xff    0x7f    0x00    0x00  |-- PyObject* (222) (NOTE: this is data in extra space allocated after the struct!)
+(gdb) print tup->ob_item[0]
+$2 = (PyObject *) 0x7ffff7920730
+(gdb) print tup->ob_item[1]
+$3 = (PyObject *) 0x7ffff7921550
+(gdb) print PyLong_AsLong(tup->ob_item[0])
+$4 = 111
+(gdb) print PyLong_AsLong(tup->ob_item[1])
+$5 = 222
+(gdb) print lst
+$6 = (PyListObject *) 0x7ffff782a900
+(gdb) x/40bx lst
+0x7ffff782a900: 0x01    0x00    0x00    0x00    0x00    0x00    0x00    0x00  \
+0x7ffff782a908: 0x60    0x35    0x8b    0x55    0x55    0x55    0x00    0x00   -- PyObject_VAR_HEAD
+0x7ffff782a910: 0x02    0x00    0x00    0x00    0x00    0x00    0x00    0x00  /
+0x7ffff782a918: 0x80    0x31    0x8b    0xf7    0xff    0x7f    0x00    0x00  |-- PyObject** (ob_item)   ---\  // +8 bytes
+0x7ffff782a920: 0x02    0x00    0x00    0x00    0x00    0x00    0x00    0x00  |-- Py_ssize_t (allocated)    |  // +8 bytes
+(gdb) print lst->ob_item                                                                                    |
+$7 = (PyObject **) 0x7ffff78b3180                                                                           |
+(gdb) x/16bx lst->ob_item                                                                                   |
+0x7ffff78b3180: 0x10    0xc9    0x8a    0xf7    0xff    0x7f    0x00    0x00  |-- PyObject* (333) <---------/
+0x7ffff78b3188: 0x30    0xc9    0x8a    0xf7    0xff    0x7f    0x00    0x00  |-- PyObject* (444)
+(gdb) print lst->ob_item[0]
+$8 = (PyObject *) 0x7ffff78ac910
+(gdb) print lst->ob_item[1]
+$9 = (PyObject *) 0x7ffff78ac930
+(gdb) print PyLong_AsLong(lst->ob_item[0])
+$10 = 333
+(gdb) print PyLong_AsLong(lst->ob_item[1])
+$11 = 444
+
