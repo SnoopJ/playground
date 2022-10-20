@@ -58,7 +58,7 @@ print("---")
 print("Listing out available packages")
 print("---")
 for count, (name, relurl) in enumerate(available_packages(), 1):
-    print(f"[#{count}] file {name!r} is available at:\n  {INDEX_BASE_URL}{relurl}")
+    print(f"[#{count}] package {name!r} is available at:\n  {INDEX_BASE_URL}{relurl}")
 
     if count >= 20:
         print("...and so on...\n")
