@@ -18,6 +18,7 @@ from pathlib import Path
 import os
 import os.path
 import random
+import shutil
 import subprocess
 
 
@@ -48,7 +49,7 @@ if __name__ == "__main__":
     newimg = random.choice(candidates)
 
     TARGET_FILE.unlink(missing_ok=True)
-    os.symlink(newimg, TARGET_FILE)
+    shutil.copyfile(newimg, TARGET_FILE)
     print("New virtual background installed")
 
     # Zoom won't pick up the change unless we change our background away and
