@@ -41,6 +41,10 @@ struct networkSupported
   }
 };
 
+// NOTE: interestingly, you can also BOOST_AUTO_TEST_SUITE(my_suite, REQUIRES(...))
+// which is not explicitly documented, but apparently the precondition decorator
+// works for suites too (I have no idea what the test ID would be in that case though)
+
 BOOST_AUTO_TEST_CASE(should_run, REQUIRES(supportedNet))
 {
   BOOST_TEST(true);
