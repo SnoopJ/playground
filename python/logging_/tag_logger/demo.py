@@ -28,7 +28,7 @@ def make_noise():
         logger.log_tag(tag, "Unknown tag")
 
 
-def example(tags: List[str], pass_untagged: bool = False):
+def example(tags: List[str], pass_untagged: bool = True):
     flt = TagFilter(tags, pass_untagged=pass_untagged)
     logger.addFilter(flt)
 
@@ -40,11 +40,12 @@ def example(tags: List[str], pass_untagged: bool = False):
 
 
 if __name__ == "__main__":
-    KNOWN_TAGS = ["Tag1", "Tag2", "Tag3"]
+    KNOWN_TAGS = ["Tag1", "Tag2", "Tag3"]      # our filter is aware of such-and-such tags
 
-    example(KNOWN_TAGS)
-    example(KNOWN_TAGS, pass_untagged=True)  # we can include untagged messages
-    example("Tag1")  # we can filter by single tags...
-    example("Tag2")
-    example(["Tag1", "Tag2"])  # ... or multiple tags ...
+    example(KNOWN_TAGS)                        # we can include untagged messages…
+    example(KNOWN_TAGS, pass_untagged=False)   # … or exclude them
+
+    example("Tag1")                            # we can filter by single tags…
+    example("Tag2")                            #
+    example(["Tag1", "Tag2"])                  # …or multiple tags
     print()
