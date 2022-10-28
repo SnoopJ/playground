@@ -2,11 +2,10 @@ $ make && ./test --log_level=all
 g++ -I{BOOST} test.cpp -o test
 Running 2 test cases...
 Entering test module "tests_with_preconditions"
-test.cpp(40): Entering test case "test3"
-test.cpp(43): info: check true has passed
-test.cpp(40): Leaving test case "test3"; testing time: 284us
-test.cpp(46): Test case "test4" is skipped because precondition failed
-Leaving test module "tests_with_preconditions"; testing time: 780us
+test.cpp(48): Entering test case "should_run"
+test.cpp(50): info: check true has passed
+test.cpp(48): Leaving test case "should_run"; testing time: 156us
+test.cpp(53): Test case "should_not_run" is skipped because precondition failed
+Leaving test module "tests_with_preconditions"; testing time: 219us
 
 *** No errors detected
-
