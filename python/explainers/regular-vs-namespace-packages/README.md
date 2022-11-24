@@ -24,7 +24,7 @@ nspkg does NOT define y
 Importing regpkg
 -----
 executing regpkg/__init__.py (this module is called regpkg)
-executing regpkg/subpkg.py
+executing regpkg/subpkg.py (this module is called regpkg.subpkg)
 
 regpkg summary
 -----
@@ -36,7 +36,7 @@ regpkg does NOT define y
 
 Importing nspkg.subpkg
 -----
-executing nspkg/subpkg.py
+executing nspkg/subpkg.py (this module is called nspkg.subpkg)
 
 nspkg.subpkg summary
 -----
