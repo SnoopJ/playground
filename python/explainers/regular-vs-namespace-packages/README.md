@@ -1,7 +1,12 @@
 This sample attempts to demonstrate the difference between "regular" packages
-(ones defined by the presence of an `__init__.py`) from ["namespace" packages](https://peps.python.org/pep-0420/)
+(ones defined by the presence of an `__init__.py`) and "namespace" packages.
 
-In brief summary:
+If you want the long and kinda-technical story on the distinction, you can read
+the [official import system documentation](https://docs.python.org/3/reference/import.html#packages)
+and/or [PEP 420](https://peps.python.org/pep-0420/), but I wrote this thinking
+that it may help demonstrate some of the differences.
+
+Brief summary:
 
 * Namespace packages only let you do/define useful things in subpackages  
 * Regular packages have `__init__.py` which is a natural place to do/define "top-level" stuff
