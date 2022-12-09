@@ -51,7 +51,7 @@ def to_human_ver(ms: int, ls: int):
 
 
 def to_inhuman_ver(a: int, b: int, c: int, d: int):
-    """Given uman readable version X.Y.Z.W, return the most/least significant version fields"""
+    """Given human readable version X.Y.Z.W, return the most/least significant version fields"""
     # TODO: what if b,d are too large? round-trips fine as is assuming we asked for something that fits the field
     ms = (a << 16) + b
     ls = (c << 16) + d
