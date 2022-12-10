@@ -1,18 +1,19 @@
 ## Description
 
-Based on a question asked in #python on Libera.chat on 10 Dec 2022 about
-debugging a program that reads from stdin, meaning that normal usage of pdb
+Based on a question asked in `#python` on Libera.chat on 10 Dec 2022 about
+debugging a program that reads from `stdin`, meaning that normal usage of `pdb`
 gets mixed up with the program's input.
 
 Ideally, the program could be re-written to take its input from a file, freeing
-up stdin for pdb's usage, or the user could rely on a debugging tool with a
-"remote debugging" feature [1]. But the question got me curious how pdb could
-be cajoled into taking its input from somewhere other than sys.stdin
+up `stdin` for `pdb`'s usage, or the user could rely on a debugging tool with a
+"remote debugging" feature (e.g. [pudb](https://documen.tician.de/pudb/starting.html#remote-debugging),
+my personal preference). But the question got me curious how `pdb` could be
+cajoled into taking its input from somewhere other than `sys.stdin`
 
 With kudos to StackOverflow user dmoreno for an answer that got me started:
 https://stackoverflow.com/a/26975795
 
-[1] pudb, my preferred debugger, has such a feature: https://documen.tician.de/pudb/starting.html#remote-debugging
+
 
 ## Usage
 
