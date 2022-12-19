@@ -17,7 +17,18 @@ to support this alternate layout, but I don't know what that looks like
 
 ```
 $ ./dist/app/app
-[594501] Error loading Python lib '/home/snoopjedi/playground/python/pyinstaller_/modified_layout/dist/app/libpython3.9.so.1.0': dlopen: /home/snoopjedi/playground/python/pyinstaller_/modified_layout/dist/app/libpython3.9.so.1.0: cannot open shared object file: No such file or directory
+Traceback (most recent call last):
+  File "subprocess.py", line 73, in <module>
+ModuleNotFoundError: No module named 'msvcrt'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "PyInstaller/hooks/rthooks/pyi_rth_subprocess.py", line 12, in <module>
+  File "PyInstaller/loader/pyimod02_importers.py", line 499, in exec_module
+  File "subprocess.py", line 78, in <module>
+ModuleNotFoundError: No module named '_posixsubprocess'
+[606967] Failed to execute script 'pyi_rth_subprocess' due to unhandled exception!
 ```
 
 ## Example output

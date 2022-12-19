@@ -27,8 +27,14 @@ a = Analysis(
 def munge_bin(toc_entry):
     oldpath, path, type = toc_entry
     prefix = "lib/"
-    newpath = prefix + oldpath
-    logger.info("Modifying path %r to %r", oldpath, newpath)
+    if "libpython" not in oldpath:
+        newpath = prefix + oldpath
+        logger.info("Modifying path %r to %r", oldpath, newpath)
+    else:
+        # do NOT modify libpython layout, which is enough to get
+        # an interpreter that starts up, although it fails during init
+        # of the runtime hooks
+        newpath = oldpath
 
     return (newpath, path, type)
 
