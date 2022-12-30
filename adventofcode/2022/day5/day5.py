@@ -98,8 +98,29 @@ def part1(drawing, moves):
     return ''.join(col[-1] for col in drawing)
 
 
-def part2():
-    pass
+def part2(drawing, moves):
+    # it's convenient to mutate the drawing in-place, so let's take a copy
+    # (note: we need a 'deep' copy here since we have nested lists)
+    drawing = deepcopy(drawing)
+
+    for mov in moves:
+        count, from_, to = mov
+#         print(f"Moving {count} boxes from #{from_} to #{to}")
+#         print("before:")
+#         print_drawing(drawing)
+        move_stack = []
+        for _ in range(count):
+            move_stack.append(drawing[from_ - 1].pop())
+
+        # The CrateMover 9001 can preserve the original order
+        move_stack.reverse()
+        drawing[to - 1].extend(move_stack)
+
+#         print("after:")
+#         print_drawing(drawing)
+#         print()
+
+    return ''.join(col[-1] for col in drawing)
 
 
 @click.command()
@@ -120,8 +141,8 @@ def main(input):
     ans1 = part1(drawing, moves)
     print(f"Part 1: {ans1}")
 
-    # ans2 = part2()
-    # print(f"Part 2: {ans2}")
+    ans2 = part2(drawing, moves)
+    print(f"Part 2: {ans2}")
 
 if __name__ == '__main__':
     main()
