@@ -48,8 +48,36 @@ def part1(moves, debug: bool = False) -> int:
     return len(visited)
 
 
-def part2():
-    pass
+def part2(moves, debug: bool = False) -> int:
+    rope = Rope(N_knots=10)
+
+    grid = Grid.from_moves(moves)
+
+    if debug:
+        print("=== Initial State ===\n")
+        grid.print(rope)
+        print()
+
+
+    visited = set()
+    for (dir,dist) in moves:
+        if debug:
+            print(f"=== {dir} {dist} ===\n")
+
+        dx, dy = Grid.DELTAS[dir]
+        for _ in range(dist):
+            rope.move_head((dx, dy))
+
+            if debug:
+                grid.print(rope)
+                print()
+
+            visited.add(tuple(rope.tail))
+
+    grid.print_visited(visited)
+    print()
+
+    return len(visited)
 
 
 @click.command()
@@ -63,8 +91,8 @@ def main(input, debug):
     ans1 = part1(moves, debug=debug)
     print(f"Part 1: {ans1} points visited")
 
-    # ans2 = part2()
-    # print(f"Part 2: {ans2}")
+    ans2 = part2(moves, debug=debug)
+    print(f"Part 2: {ans2} points visited")
 
 if __name__ == '__main__':
     main()
