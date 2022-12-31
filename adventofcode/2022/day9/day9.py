@@ -69,7 +69,6 @@ def main(input, debug):
         moves = parse_moves(f)
 
 
-    # 1660 is too low
     ans1 = part1(moves, debug=debug)
     print(f"Part 1: {ans1} points visited")
 
