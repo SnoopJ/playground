@@ -38,13 +38,64 @@ def vizgrid(grid: Grid) -> Grid:
     return viz
 
 
+def vizscore(grid: Grid, row: int, col: int) -> int:
+    H = len(grid)
+    W = len(grid[0])
+
+    # edges score 0 by definition
+    if row in (0, W-1) or col in (0, H-1):
+        return 0
+
+    val = grid[row][col]
+    leftscore = rightscore = upscore = downscore = 0
+
+    for r in range(row-1, -1, -1):
+        leftscore += 1
+        if grid[r][col] >= val:
+            break
+
+    for r in range(row+1, W):
+        rightscore += 1
+        if grid[r][col] >= val:
+            break
+
+    for c in range(col-1, -1, -1):
+        upscore += 1
+        if grid[row][c] >= val:
+            break
+
+    for c in range(col+1, H):
+        downscore += 1
+        if grid[row][c] >= val:
+            break
+
+    score = leftscore * rightscore * upscore * downscore
+
+    return score
+
+
 def part1(viz: Grid) -> int:
     num_visible = sum(sum(row) for row in viz)
     return num_visible
 
 
-def part2():
-    pass
+def part2(grid: Grid) -> int:
+    H = len(grid)
+    W = len(grid[0])
+
+    maxscore = 0
+    winner = None
+
+    for rowidx, row in enumerate(grid):
+        for colidx, val in enumerate(row):
+            score = vizscore(grid, rowidx, colidx)
+#             print(f"({rowidx}, {colidx}), {val}: {score=}")
+
+            if score > maxscore:
+                winner = (rowidx, colidx)
+                maxscore = score
+
+    return maxscore
 
 
 @click.command()
@@ -58,8 +109,8 @@ def main(input):
     ans1 = part1(viz)
     print(f"Part 1: {ans1}")
 
-    # ans2 = part2()
-    # print(f"Part 2: {ans2}")
+    ans2 = part2(grid)
+    print(f"Part 2: {ans2}")
 
 if __name__ == '__main__':
     main()
