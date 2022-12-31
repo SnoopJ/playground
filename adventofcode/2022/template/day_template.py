@@ -4,6 +4,7 @@ import click
 def part1(debug: bool = False):
     pass
 
+
 def part2(debug: bool = False):
     pass
 
@@ -20,6 +21,7 @@ def main(input, debug):
 
     # ans2 = part2(debug=debug)
     # print(f"Part 2: {ans2}")
+
 
 if __name__ == '__main__':
     main()
