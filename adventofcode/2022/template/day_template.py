@@ -1,6 +1,3 @@
-from itertools import count
-import string
-
 import click
 
 
