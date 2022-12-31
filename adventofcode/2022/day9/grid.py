@@ -1,9 +1,7 @@
 from dataclasses import dataclass
 
 from pair import Pair
-
-
-
+from rope import Rope
 
 
 @dataclass
@@ -45,14 +43,15 @@ class Grid:
     def height(self):
         return self.ymax - self.ymin + 1
 
-    def print(self, head: Pair, tail: Pair):
+    def print(self, rope: Rope):
         grid = [['.'] * self.width for _ in range(self.height)]
 
-        hx, hy = head
-        tx, ty = tail
         grid[0 - self.ymin][0 - self.xmin] = 's'
-        grid[ty - self.ymin][tx - self.xmin] = 'T'
-        grid[hy - self.ymin][hx - self.xmin] = 'H'
+
+        labels = [*range(rope.N_knots - 1, 0, -1), 'H']
+        for node, label in zip(reversed(rope), labels):
+            nx, ny = node
+            grid[ny - self.ymin][nx - self.xmin] = label
 
         # NOTE: it's convenient to represent the grid "upside-down" in memory and
         # then flip it when printing

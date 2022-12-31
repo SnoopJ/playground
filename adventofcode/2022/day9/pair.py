@@ -18,6 +18,11 @@ class Pair:
         self.x = int(x)
         self.y = int(y)
 
+    def move(self, offset) -> None:
+        dx, dy = offset
+        self.x += dx
+        self.y += dy
+
     # NOTE: the self-referencing annotation here requires the __future__ to work
     def move_towards(self, other: Pair) -> None:
         dx, dy = other - self
@@ -53,20 +58,12 @@ class Pair:
             ox, oy = other
             return self.x == ox and self.y == oy
 
-    def __add__(self, other):
-        if isinstance(other, Pair):
-            dx, dy = other.x, other.y
-        else:
-            dx, dy = other[0], other[1]
-
-        return Pair(self.x + dx, self.y + dy)
-
     def __sub__(self, other):
         if isinstance(other, Pair):
             dx, dy = -other.x, -other.y
         else:
             dx, dy = -other[0], -other[1]
 
-        return self + (dx, dy)
+        return Pair(self.x + dx, self.y + dy)
 
 

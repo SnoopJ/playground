@@ -3,6 +3,7 @@ import click
 # NOTE: I assume with these imports that we are running day9.py from the same dir as pair.py
 from grid import Grid
 from pair import Pair
+from rope import Rope
 
 
 def parse_moves(lines):
@@ -16,14 +17,13 @@ def parse_moves(lines):
 
 
 def part1(moves, debug: bool = False) -> int:
-    head = Pair(0, 0)
-    tail = Pair(0, 0)
+    rope = Rope(N_knots=2)
 
     grid = Grid.from_moves(moves)
 
     if debug:
         print("=== Initial State ===\n")
-        grid.print(head, tail)
+        grid.print(rope)
         print()
 
 
@@ -31,25 +31,16 @@ def part1(moves, debug: bool = False) -> int:
     for (dir,dist) in moves:
         if debug:
             print(f"=== {dir} {dist} ===\n")
+
         dx, dy = Grid.DELTAS[dir]
         for _ in range(dist):
-            head += (dx, dy)
-            tail.move_towards(head)
-            hx, hy = head
-            tx, ty = tail
-            ddx, ddy = head - tail
-            ddx = abs(ddx)
-            ddy = abs(ddy)
+            rope.move_head((dx, dy))
 
             if debug:
-                grid.print(head, tail)
+                grid.print(rope)
                 print()
 
-            assert ((ddx == 0 and ddy == 0) or
-                    (ddx == 1 and ddy == 0) or
-                    (ddx == 0 and ddy == 1) or
-                    (ddx == 1 and ddy == 1)), f"Tail appears to be too far away from head ({ddx=}, {ddy=})"
-            visited.add(tuple(tail))
+            visited.add(tuple(rope.tail))
 
     grid.print_visited(visited)
     print()
