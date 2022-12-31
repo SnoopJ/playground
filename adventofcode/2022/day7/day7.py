@@ -94,8 +94,14 @@ def part1(sizes: Counter) -> int:
     return total
 
 
-def part2():
-    pass
+def part2(sizes: Counter, fs_size: int, target_size: int):
+    free = fs_size - sizes[PurePath("/")]
+    delta = target_size - free
+    candidates = [(pth, sz) for pth, sz in sizes.items() if sz >= delta]
+#     print(f"{delta=}")
+#     print(candidates)
+
+    return min(candidates, key=lambda pair: pair[1])
 
 
 @click.command()
@@ -115,8 +121,12 @@ def main(input):
     ans1 = part1(sizes)
     print(f"Part 1: {ans1}")
 
-    # ans2 = part2()
-    # print(f"Part 2: {ans2}")
+    fs_size = 70_000_000
+    target_size = 30_000_000
+
+    mindir, sz = part2(sizes, fs_size, target_size)
+
+    print(f"Part 2: {mindir} = {sz}")
 
 if __name__ == '__main__':
     main()
