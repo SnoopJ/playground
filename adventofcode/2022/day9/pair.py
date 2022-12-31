@@ -19,7 +19,7 @@ class Pair:
         self.y = int(y)
 
     # NOTE: the self-referencing annotation here requires the __future__ to work
-    def move_towards(self, other: Pair) -> Pair:
+    def move_towards(self, other: Pair) -> None:
         dx, dy = other - self
         adx = abs(dx)
         ady = abs(dy)
@@ -28,16 +28,17 @@ class Pair:
 
         if dxn == 0 and ady > 1:
 #             print("move in same column")
-            return self + (0, dyn)
+            self.y += dyn
         elif dyn == 0 and adx > 1:
 #             print("move in same row")
-            return self + (dxn, 0)
+            self.x += dxn
         elif dxn != 0 and dyn != 0 and (adx + ady) > 2:
 #             print("move diagonally")
-            return self + (dxn, dyn)
+            self.x += dxn
+            self.y += dyn
         else:
 #             print("no move")
-            return self
+            pass
 
     def __repr__(self):
         return f"{self.__class__.__name__}({self.x}, {self.y})"

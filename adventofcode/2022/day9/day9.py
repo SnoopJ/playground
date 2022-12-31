@@ -34,7 +34,7 @@ def part1(moves, debug: bool = False) -> int:
         dx, dy = Grid.DELTAS[dir]
         for _ in range(dist):
             head += (dx, dy)
-            tail = tail.move_towards(head)
+            tail.move_towards(head)
             hx, hy = head
             tx, ty = tail
             ddx, ddy = head - tail
