@@ -1,4 +1,6 @@
+from functools import reduce
 import logging
+import operator
 import sys
 
 import click
@@ -17,13 +19,14 @@ def monkey_descs(lines) -> list[str]:
             yield "\n".join(acc)
             acc.clear()
         else:
-            acc.append(line)
+            acc.append(line.rstrip())
 
     if acc:
         yield "\n".join(acc)
 
 
-def part1(monkeys):
+def part1(descs):
+    monkeys = [Monkey.from_desc(desc) for desc in descs]
     biz = MonkeyBusiness(monkeys)
 
     for roundnum in range(1, 21):
@@ -41,8 +44,33 @@ def part1(monkeys):
     return a*b
 
 
-def part2():
-    pass
+def part2(descs):
+    monkeys = [Monkey.from_desc(desc, worry_control=False) for desc in descs]
+
+    # AoC makes this problem harder by allowing the item worry values grow
+    # unbounded, but since all of the tests hinge on modular arithmetic, we
+    # can bound the worries above by the product of all the test divisors
+    #
+    # This requires O(N_items) work on each iteration but does bring the program
+    # runtime back into reach of reality
+    cap = reduce(operator.mul, [monk.test.divisor for monk in monkeys])
+
+    biz = MonkeyBusiness(monkeys)
+
+    for roundnum in range(1, 10_001):
+        biz.handle_round()
+        LOGGER.debug("After round #%s, monkey inventories are:", roundnum)
+        for monk in monkeys:
+            LOGGER.debug("  Monkey %s: %s", monk.id, monk.items)
+            monk.items = [item % cap for item in monk.items]
+
+    counts = {monk.id: monk.inspection_count for monk in monkeys}
+    for id, count in counts.items():
+        print(f"Monkey {id} inspected items {count} times.")
+
+    a, b = sorted(counts.values(), reverse=True)[:2]
+
+    return a*b
 
 
 @click.command()
@@ -55,15 +83,13 @@ def main(input, debug):
     )
 
     with open(input, "r") as f:
-        txt = f.read()
-        descs = list(monkey_descs(txt.splitlines()))
-        monkeys = [Monkey.from_desc(desc) for desc in descs]
+        descs = list(monkey_descs(f))
 
-    ans1 = part1(monkeys)
+    ans1 = part1(descs)
     print(f"Part 1: {ans1}")
 
-    # ans2 = part2(debug=debug)
-    # print(f"Part 2: {ans2}")
+    ans2 = part2(descs)
+    print(f"Part 2: {ans2}")
 
 
 if __name__ == '__main__':

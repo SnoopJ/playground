@@ -66,6 +66,7 @@ class Monkey:
 
     items: list[ItemWorry] = field(default_factory=list)
 
+    worry_control: bool = True
     inspection_count: int = 0
 
     @staticmethod
@@ -101,7 +102,7 @@ class Monkey:
         )
 
     @classmethod
-    def from_desc(cls, desc: str):
+    def from_desc(cls, desc: str, **kwargs):
         m = MonkeyMatcher.match(desc)
         assert m, "Invalid Monkey description"
 
@@ -116,6 +117,7 @@ class Monkey:
             items=items,
             op=op,
             test=test,
+            **kwargs,
         )
 
     def catch(self, items: list[ItemWorry]):
@@ -130,8 +132,11 @@ class Monkey:
             self.inspection_count += 1
             new_item = self.op(item)
             LOGGER.debug("    Worry level goes from %s to %s", item, new_item)
-            new_item = new_item // 3
-            LOGGER.debug("    Monkey gets bored with item. Worry level is divided by 3 to %s", new_item)
+            if self.worry_control:
+                new_item = new_item // 3
+                LOGGER.debug("    Monkey gets bored with item. Worry level is divided by 3 to %s", new_item)
+            else:
+                LOGGER.debug("    Monkey gets bored with item. Worry level is unmodified")
             dest = self.test(new_item)
             throws[dest].append(new_item)
             LOGGER.debug("    Item with worry level %s is thrown to monkey %s", new_item, dest)
