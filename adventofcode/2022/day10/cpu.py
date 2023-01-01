@@ -19,6 +19,9 @@ INSTRUCTIONS = {
 }
 
 
+DISPLAY_W = 40
+DISPLAY_H = 6
+
 @dataclass
 class CPU:
     cycles: int = 1
@@ -30,6 +33,10 @@ class CPU:
     curr_i: Instruction = field(default=None)
     curr_delay: int = field(default=None, init=False)
     debug: bool = False
+
+    def __post_init__(self):
+        self.display = [[' ' for _ in range(DISPLAY_W)] for _ in range(DISPLAY_H)]
+        self.update_display()
 
     def load(self, instructions):
         self.instructions.extend(instructions)
@@ -61,3 +68,32 @@ class CPU:
             pass
         else:
             raise ValueError("Invalid delay")
+
+        self.update_display()
+
+
+    def update_display(self):
+        pix_x = (self.cycles-1) % (DISPLAY_W)
+        pix_y = ((self.cycles-1) // (DISPLAY_W)) % DISPLAY_H
+
+        dist = abs(self.X - pix_x)
+        if self.debug:
+            print(f"Cycle #{self.cycles}, {pix_x=}, {pix_y=}")
+            print(f"Sprite distance from active pixel is {dist}")
+        if dist <= 1:
+            self.display[pix_y][pix_x] = '#'
+        else:
+            self.display[pix_y][pix_x] = '.'
+
+    def draw_display(self):
+        print(f"Display on cycle #{self.cycles}:\n===============================")
+        for row in self.display:
+            print(*row, sep='')
+        print()
+
+    def draw_sprite(self):
+        row = ['.' for _ in range(DISPLAY_W)]
+        row[self.X-1:self.X+1] = '###'
+
+        print(f"Sprite position on cycle #{self.cycles}:")
+        print(*row, sep='')
