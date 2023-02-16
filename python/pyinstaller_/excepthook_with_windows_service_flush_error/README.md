@@ -22,7 +22,7 @@ On Windows, run:
 `python -m PyInstaller --noconfirm pyinstaller_entrypoint.py`  
 `.\dist\pyinstaller_entrypoint\pyinstaller_entrypoint.exe install`  
 `.\dist\pyinstaller_entrypoint\pyinstaller_entrypoint.exe start`  
-`cat .\dist\pyinstaller_entrypoint\acmelib.log`
+`cat .\dist\pyinstaller_entrypoint\acmelib.log`  
 `.\dist\pyinstaller_entrypoint\pyinstaller_entrypoint.exe remove`  
 
 I was able to reproduce this on Windows 10 with Python 3.7, PyInstaller 5.8.0 (as well as 4.9)
