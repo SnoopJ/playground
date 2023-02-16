@@ -1,0 +1,15 @@
+DEBUG:acmelib:entrypoint excepthook installed
+INFO:acmelib:acmelib.main() beginning
+INFO:acmelib:acmelib.main() looping (iteration #0)
+INFO:acmelib:acmelib.main() looping (iteration #1)
+INFO:acmelib:acmelib.main() looping (iteration #2)
+INFO:acmelib:acmelib.main() looping (iteration #3)
+INFO:acmelib:acmelib.main() looping (iteration #4)
+ERROR:acmelib:Uncaught exception:
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+AttributeError: 'NoneType' object has no attribute 'flush'
+ERROR:acmelib:Uncaught exception:
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+AttributeError: 'NoneType' object has no attribute 'flush'
