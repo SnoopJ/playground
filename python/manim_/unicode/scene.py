@@ -20,7 +20,7 @@ FILL = "#cccccc"
 W=0.85
 H=0.8
 DW=0.1
-DH=0.1
+DH=0.4
 
 def draw_codepoints(txt) -> VGroup:
     grp = VGroup()
@@ -104,14 +104,11 @@ def graphemes(txt: str) -> List[str]:
     return graphs
 
 
-def draw_grapheme_clusters(txt) -> VGroup:
+def draw_grapheme_clusters(txt, codept_grp: VGroup) -> VGroup:
     offset = 0
     grp = VGroup()
     for cluster in graphemes(txt):
         cluster_size = len(cluster)
-
-        DX = 0
-        DY = offset*(H + DH) + (H/2*cluster_size if cluster_size>1 else 0)
 
         GH = (H + DH)*cluster_size
 
@@ -121,8 +118,10 @@ def draw_grapheme_clusters(txt) -> VGroup:
                 height=GH,
                 color=RED,
                 fill_opacity=0.0,
+                stroke_width=2,
             )
-            .shift(DOWN*DY)
+            .move_to(codept_grp[offset][0].get_top())
+            .shift(DOWN*GH/2 + UP*0.4*DH)
         )
         cluster_txt = (
             Text(
@@ -131,7 +130,7 @@ def draw_grapheme_clusters(txt) -> VGroup:
                 font_size=24,
             )
             .next_to(cluster_poly, direction=LEFT)
-            .shift(DOWN*0.1)
+            .shift(DOWN*0.05)
         )
         grp.add(cluster_poly, cluster_txt)
 
@@ -163,7 +162,7 @@ class MyScene(Scene):
             grp = VGroup()
 
             codept_grp = draw_codepoints(txt)
-            clusters_grp = draw_grapheme_clusters(txt)
+            clusters_grp = draw_grapheme_clusters(txt, codept_grp)
 
             codept_grp.shift(RIGHT*self.X0).shift(DOWN*self.Y0)
             clusters_grp.shift(RIGHT*self.X0).shift(DOWN*self.Y0)
