@@ -1,0 +1,10 @@
+Source: pyi-hello
+Priority: optional
+Maintainer: SnoopJ
+Build-Depends: debhelper (>=11~)
+Standards-Version: 4.1.4
+
+Package: pyi-hello
+Architecture: amd64
+Depends:
+Description: A friendly little PyInstaller "hello world"

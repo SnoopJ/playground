@@ -1,0 +1,6 @@
+pyi-hello for Debian
+
+This package provides a little PyInstaller program that says hello to you, and
+*this* is the README for that program.
+
+ --  <>  Tue, 02 May 2023 18:31:27 -0400

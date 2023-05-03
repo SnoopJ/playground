@@ -1,0 +1,3 @@
+shlibs:Depends=libbz2-1.0, libc6 (>= 2.29), libexpat1 (>= 2.1~beta3), liblzma5 (>= 5.1.1alpha+20120614), libssl1.1 (>= 1.1.1), zlib1g (>= 1:1.2.0)
+misc:Depends=
+misc:Pre-Depends=
