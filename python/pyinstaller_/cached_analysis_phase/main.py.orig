@@ -1,0 +1,6 @@
+# numpy included here as an example of a reasonably-demanding dependency for
+# PyInstaller's Analysis phase
+import numpy
+
+
+print("Hello world!")
