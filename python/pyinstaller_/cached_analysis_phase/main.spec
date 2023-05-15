@@ -1,10 +1,23 @@
 # -*- mode: python ; coding: utf-8 -*-
 import os
+import os.path
 import json
+import shutil
 from dataclasses import dataclass
+from pathlib import Path
 
+from PyInstaller.config import CONF as PYI_CONF
+from PyInstaller.log import logger as LOGGER
 from PyInstaller.utils.hooks import collect_all
 
+
+WORKDIR = Path(PYI_CONF["workpath"])
+HERE = Path(SPECPATH)
+CACHE_DIR = HERE.joinpath("pyi_analysis_cache")
+CACHE_DIR.mkdir(exist_ok=True)
+ANALYSIS_CACHE = CACHE_DIR.joinpath("analysis_cache.json")
+BASE_LIB_BUILT = WORKDIR.joinpath("base_library.zip")
+BASE_LIB_CACHE = CACHE_DIR.joinpath("base_library.zip")
 
 block_cipher = None
 
@@ -29,12 +42,14 @@ class CachedAnalysis:
         return cls(**args)
 
 
-analysis_cache_fn = os.environ.get("PYI_ANALYSIS_CACHE")
-if analysis_cache_fn:
-    print(f"Using cached analysis from {analysis_cache_fn!r}")
-    a = CachedAnalysis.from_json_file(analysis_cache_fn)
+use_cache = os.environ.get("PYI_ANALYSIS_CACHE")
+if use_cache:
+    LOGGER.info(f"Using cached analysis from {str(CACHE_DIR)!r}")
+    a = CachedAnalysis.from_json_file(ANALYSIS_CACHE)
+    if BASE_LIB_CACHE.exists():
+        shutil.copy(BASE_LIB_CACHE, WORKDIR)
 else:
-    print("Running main analysis")
+    LOGGER.info("Running main analysis")
     a = Analysis(
         ['main.py'],
         pathex=[],
@@ -51,7 +66,7 @@ else:
         noarchive=False,
     )
 
-    with open("analysis_cache.json", "w") as f:
+    with open(ANALYSIS_CACHE, "w") as f:
         json.dump({
                 "scripts": list(a.scripts),
                 "pure": list(a.pure),
@@ -62,6 +77,11 @@ else:
             f,
             indent=4,
         )
+        LOGGER.info(f"Analysis cache written to {str(ANALYSIS_CACHE)!r}")
+
+    if BASE_LIB_BUILT.exists():
+        shutil.copy(BASE_LIB_BUILT, BASE_LIB_CACHE)
+        LOGGER.info(f"base_library.zip cached to {str(BASE_LIB_CACHE)!r}")
 
 
 pyz = PYZ(a.pure, a.zipfiles, cipher=block_cipher)

@@ -5,6 +5,7 @@ build:
 	@echo
 	@cp main.py.orig main.py
 	@python3 -m PyInstaller \
+		--clean \
 		--noconfirm \
 		main.spec
 
@@ -14,8 +15,9 @@ build-modified:
 	@echo "---"
 	@echo
 	@cp main.py.mod main.py
-	@PYI_ANALYSIS_CACHE=analysis_cache.json \
+	@PYI_ANALYSIS_CACHE=1 \
 		python3 -m PyInstaller \
+			--clean \
 			--noconfirm \
 			main.spec
 
