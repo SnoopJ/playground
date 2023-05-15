@@ -6,12 +6,11 @@ import shutil
 from dataclasses import dataclass
 from pathlib import Path
 
-from PyInstaller.config import CONF as PYI_CONF
 from PyInstaller.log import logger as LOGGER
 from PyInstaller.utils.hooks import collect_all
 
 
-WORKDIR = Path(PYI_CONF["workpath"])
+WORKDIR = Path(workpath)
 HERE = Path(SPECPATH)
 CACHE_DIR = HERE.joinpath("pyi_analysis_cache")
 CACHE_DIR.mkdir(exist_ok=True)
