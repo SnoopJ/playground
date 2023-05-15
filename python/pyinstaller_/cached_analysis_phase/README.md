@@ -1,6 +1,8 @@
 This is an example of adding caching of the [`Analysis`](https://pyinstaller.org/en/stable/operating-mode.html#analysis-finding-the-files-your-program-needs)
 process to a [`PyInstaller`](https://pyinstaller.org/) build chain.
 
+**WARNING: This is ad-hoc code written while solving my specific problem, re-use with caution!**
+
 Briefly, this phase walks the dependency graph of the application being built
 in order to build up a series of Table of Contents (`TOC`) objects that are
 used by the later stages of `PyInstaller`. For complex applications, this
