@@ -3,11 +3,10 @@ import profile
 import signal
 import sys
 
-from profiler_target import main as target_main
-
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--outfile', type=str, default="out.prof")
+parser.add_argument('target', type=str)
 
 
 def main():
@@ -31,7 +30,18 @@ def main():
 
     oldhandler = signal.signal(signal.SIGTERM, _dump_on_sigterm)
 
-    prof.runctx("target_main()", globals=globals(), locals=globals())
+    with open(args.target, "rb") as f:
+        src = f.read()
+        code = compile(src, args.target, 'exec')
+
+    globs = {
+        '__file__': args.target,
+        '__name__': '__main__',
+        '__package__': None,
+        '__cached__': None,
+    }
+
+    prof.runctx(code, globs, None)
     prof.dump_stats(args.outfile)
 
 
