@@ -86,3 +86,10 @@ After malloc_trim()
 VmRSS:    29608 KiB
 
 ```
+
+### …why?
+
+This sample grew out of [a discussion](https://github.com/shapely/shapely/discussions/1828)
+about surprising memory behavior in a program using `shapely`, and once it became
+clear that the behavior was coming from `glibc`, I decided to write a more
+direct example of that behavior.
