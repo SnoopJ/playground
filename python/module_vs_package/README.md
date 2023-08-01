@@ -1,12 +1,16 @@
 This sample attempts to demonstrate the difference between a Python _module_
 and a Python _package_.
 
+
 A [_module_](https://docs.python.org/3/glossary.html#term-module) is a 'box'
 that holds Python code. The most common way to create a module is a plain old
 `.py` file.
 
+
 A [_package_](https://docs.python.org/3/glossary.html#term-package) is a
-**special kind** of module that may contain other modules or packages.
+**special kind** of module that may contain other modules or packages. The most
+common way to create a package is to create a directory containing an
+`__init__.py`, which is a special filename recognized by the interpreter.
 Continuing the 'box' analogy, you can think of a package as a box that might
 hold other boxes.
 
