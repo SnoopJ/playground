@@ -19,25 +19,29 @@ hold other boxes.
 
 ```
 $ python3 main.py
-mymod.__name__ = mymod
+running `import mymod`
+Imported module mymod defined by file /var/lib/gitea/data/gitea-repositories/snoopj/playground.git/python/module_vs_package/mymod.py
 mymod is NOT a package
 mymod.data = 42
 
 ---
 
-pkg.__name__ = pkg
+running `import pkg`
+Imported module pkg defined by file /var/lib/gitea/data/gitea-repositories/snoopj/playground.git/python/module_vs_package/pkg/__init__.py
 pkg is a package, pkg.__path__ = ['/var/lib/gitea/data/gitea-repositories/snoopj/playground.git/python/module_vs_package/pkg']
 pkg.data = 42
 
 ---
 
-pkg.submod.__name__ = pkg.submod
+running `import pkg.submod`
+Imported module pkg.submod defined by file /var/lib/gitea/data/gitea-repositories/snoopj/playground.git/python/module_vs_package/pkg/submod.py
 pkg.submod is NOT a package
 pkg.submod.data = -1
 
 ---
 
-pkg.subpkg.__name__ = pkg.subpkg
+running `import pkg.subpkg`
+Imported module pkg.subpkg defined by file /var/lib/gitea/data/gitea-repositories/snoopj/playground.git/python/module_vs_package/pkg/subpkg/__init__.py
 pkg.subpkg is a package, pkg.subpkg.__path__ = ['/var/lib/gitea/data/gitea-repositories/snoopj/playground.git/python/module_vs_package/pkg/subpkg']
 pkg.subpkg.data = 1337
 
