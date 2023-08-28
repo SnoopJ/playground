@@ -1,5 +1,5 @@
 This example shows how to package a [PyInstaller](https://pyinstaller.org/)
-`onefile` distribution as a [Debian binary package](https://www.debian.org/doc/debian-policy/ch-binary.html).
+`onedir` distribution as a [Debian binary package](https://www.debian.org/doc/debian-policy/ch-binary.html).
 
 To build the package on Debian/Ubuntu, install the official `devscripts`
 package, change to the `pyi-hello-0.0` directory, and run `make deb` or
