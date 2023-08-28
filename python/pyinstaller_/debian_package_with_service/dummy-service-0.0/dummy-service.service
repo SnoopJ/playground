@@ -1,0 +1,14 @@
+[Unit]
+Description=Dummy Service
+After=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/dummy-service
+
+# NOTE:This section can also contain "sandboxing" configuration that increases
+# the security of the service. See the Debian wiki for more information and an
+# example: https://wiki.debian.org/ServiceSandboxing
+
+[Install]
+WantedBy=multi-user.target

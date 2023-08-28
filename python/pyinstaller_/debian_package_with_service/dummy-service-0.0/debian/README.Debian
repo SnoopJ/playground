@@ -1,0 +1,6 @@
+dummy-service for Debian
+
+This package provides a little PyInstaller program that keeps regularly reports
+how long it has been running.
+
+ --  <>  Mon, 28 Aug 2023 14:53:00 -0400

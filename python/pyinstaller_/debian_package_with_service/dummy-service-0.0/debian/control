@@ -1,0 +1,10 @@
+Source: dummy-service
+Priority: optional
+Maintainer: SnoopJ
+Build-Depends: debhelper (>=11~)
+Standards-Version: 4.1.4
+
+Package: dummy-service
+Architecture: amd64
+Depends:
+Description: A dummy service running a PyInstaller program
