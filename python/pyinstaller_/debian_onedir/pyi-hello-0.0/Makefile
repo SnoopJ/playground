@@ -29,4 +29,6 @@ clean:
 		build_venv/ \
 		debian/pyi-hello/ \
 		debian/.debhelper/ \
+		debian/debhelper-build-stamp \
+		debian/files \
 		*.spec \
