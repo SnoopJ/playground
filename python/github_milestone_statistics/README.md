@@ -9,9 +9,4 @@ to obtain information about issues and PRs associated with the target milestone
 query into the plot below, counting up the number of open/closed issues at each
 time-point in the range to be plotted
 
-**NOTE:** there is definitely something wrong with the visualization, the
-open/closed items for the 8.1.0 and 9.0.0 milestones are transposed for some
-reason (a bad datetime comparison, perhaps)
-
-
 ![Faceted plot of multiple Sopel milestones, showing Open and Closed items for each milestone](out.png)
