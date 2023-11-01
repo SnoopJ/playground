@@ -1,4 +1,5 @@
 import json
+import math
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -6,6 +7,7 @@ from pprint import pprint
 from typing import Iterable, Optional
 
 import dateutil.parser
+from packaging.version import Version
 
 from matplotlib import pyplot as plt
 from matplotlib.dates import DateFormatter, MonthLocator, date2num
@@ -51,37 +53,50 @@ class Entry:
             return True
 
 
-def show_entries(entries: list[Entry]):
-    for ent in entries:
-        ass_info = f"assigned: {ent.milestones['8.0.0']}"
-        close_info = f", closed: {ent.closed_at}" if ent.closed_at else ""
-        ent_info = f"{ass_info}{close_info}"
-        print(f"#{ent.number:<4} — {ent.title:<80}  ({ent_info})")
-
-
-def plot_entries(entries: list[Entry]):
+def plot_entries(entries_by_milestone: dict[str, list[Entry]]):
     delta = timedelta(days=7)
 
-    dates, num_open, num_closed = zip(*_points(entries, delta))
+    plottable_data = []
+    for idx, (milestone, entries) in enumerate(entries_by_milestone.items()):
+        if not entries:
+            print(f"milestone #{idx} ({milestone!r}) has no entries")
+            continue
 
-    fig, axes = plt.subplots(1, 2, figsize=(16, 6))
-    fig.suptitle("Sopel 8.0.0 over time")
+        print(f"handling milestone #{idx}: {milestone}")
 
-    axes[0].plot(dates, num_open, 'rx-')
-    axes[0].grid(True, axis='y')
-    axes[0].set_title("Open issues/PRs")
-    axes[0].xaxis.set_minor_locator(MonthLocator())
-    axes[0].xaxis.set_major_formatter(DateFormatter('%Y-%m-%d'))
-    for label in axes[0].get_xticklabels(which='major'):
-            label.set(rotation=30, horizontalalignment='right')
+        pts = list(_points(entries, milestone, delta))
+        if not pts:
+            print(f"milestone #{idx} ({milestone!r}) has no points (?)")
+            continue
+        elif len(pts) < 10:
+            print(f"milestone #{idx} ({milestone!r}) does not have more than 10 points, omitting")
+            continue
 
-    axes[1].plot(dates, num_closed, 'bx-')
-    axes[1].grid(True, axis='y')
-    axes[1].set_title("Closed issues/PRs")
-    axes[1].xaxis.set_minor_locator(MonthLocator())
-    axes[1].xaxis.set_major_formatter(DateFormatter('%Y-%m-%d'))
-    for label in axes[1].get_xticklabels(which='major'):
-            label.set(rotation=30, horizontalalignment='right')
+        plottable_data.append((milestone, *zip(*pts)))
+
+
+    W = 2
+    H = len(plottable_data)
+    fig, axes = plt.subplots(H, W, figsize=(16, 6*H))
+    axes = axes.squeeze()
+    fig.suptitle("Sopel over time")
+
+    for idx, (milestone, dates, num_open, num_closed) in enumerate(plottable_data):
+        axes[idx, 0].plot(dates, num_open, 'rx-')
+        axes[idx, 0].grid(True, axis='y')
+        axes[idx, 0].set_title(f"Open issues/PRs ({milestone} milestone)")
+        axes[idx, 0].xaxis.set_minor_locator(MonthLocator())
+        axes[idx, 0].xaxis.set_major_formatter(DateFormatter('%Y-%m-%d'))
+        for label in axes[idx, 0].get_xticklabels(which='major'):
+                label.set(rotation=30, horizontalalignment='right')
+
+        axes[idx, 1].plot(dates, num_closed, 'bx-')
+        axes[idx, 1].grid(True, axis='y')
+        axes[idx, 1].set_title(f"Closed issues/PRs ({milestone} milestone)")
+        axes[idx, 1].xaxis.set_minor_locator(MonthLocator())
+        axes[idx, 1].xaxis.set_major_formatter(DateFormatter('%Y-%m-%d'))
+        for label in axes[idx, 1].get_xticklabels(which='major'):
+                label.set(rotation=30, horizontalalignment='right')
 
     plt.tight_layout()
     plt.savefig('out.png')
@@ -89,18 +104,18 @@ def plot_entries(entries: list[Entry]):
     print("Output saved to 'out.png'")
 
 
-def _points(entries: list[Entry], delta: timedelta) -> Iterable[tuple[float, int, int]]:
+def _points(entries: list[Entry], milestone: str, delta: timedelta) -> Iterable[tuple[float, int, int]]:
     """
     Create a series of `(timestamp, num_open, num_closed)` tuples, spanning the
     range of the given `entries` and spaced out by `delta`
 
     For each time-point in this range, count up the number of open/closed issues
-    that are associated with the 8.0.0 milestone. Issues/PRs are *not* counted
+    that are associated with the `milestone`. Issues/PRs are *not* counted
     when they are re-assigned to another milestone (and I have assumes that
-    issues are moved into the 8.0.0 milestone only once).
+    issues are moved into a milestone only once).
     """
-    start = entries[0].milestones["8.0.0"]
-    stop = entries[-1].milestones["8.0.0"]
+    start = entries[0].milestones[milestone]
+    stop = entries[-1].milestones[milestone]
     cur = start - delta
 
     while (cur := cur + delta) < stop:
@@ -111,18 +126,18 @@ def _points(entries: list[Entry], delta: timedelta) -> Iterable[tuple[float, int
                 # item doesn't exist yet
                 continue
 
-            assigned = ent.milestones["8.0.0"]
+            assigned = ent.milestones[milestone]
 
             if assigned > cur:
                 # item hasn't been assigned to this milestone yet
                 continue
             elif len(ent.milestones) > 1:
-                other_ms = [(key, ms) for key, ms in ent.milestones.items() if key != "8.0.0"]
+                other_ms = [(key, ms) for key, ms in ent.milestones.items() if key != milestone]
                 if any(ms >= cur for key, ms in other_ms):
                     # this was reassigned to some other milestone
                     continue
 
-            # otherwise this is in the 8.0.0 milestone at this date
+            # otherwise this is in the milestone at this date
             if ent.is_open_at(cur):
                 num_open += 1
             else:
@@ -135,15 +150,25 @@ def main():
     DATA_FN = HERE.joinpath("sopel_milestone_data.json")
 
     with open(DATA_FN, "r") as f:
-        data = json.load(f)
+        milestones = json.load(f)
+        milestones.sort(key=lambda ms: Version(ms['title']))
 
-    milestone = data["data"]["repository"]["milestones"]["nodes"][0]
-    issues = milestone["issues"]["nodes"]
-    prs = milestone["pullRequests"]["nodes"]
-    entries = [Entry.from_graphql(**args) for args in (*issues, *prs)]
-    entries.sort(key=lambda ent: ent.milestones["8.0.0"])
+    entries_by_milestone = {}
+    for ms in milestones:
+        title = ms["title"]
+        if Version(title) >= Version("6.0.0"):
+            print(f"Processing milestone {title!r}")
+        else:
+            print(f"Skipping milestone {title!r}")
+            continue
+        issues = ms["issues"]["nodes"]
+        prs = ms["pullRequests"]["nodes"]
+        entries = [Entry.from_graphql(**args) for args in (*issues, *prs)]
+        entries.sort(key=lambda ent: ent.milestones.get(title, datetime(year=2112, month=7, day=20)).timestamp())
 
-    plot_entries(entries)
+        entries_by_milestone[title] = entries
+
+    plot_entries(entries_by_milestone)
 
 
 if __name__ == "__main__":
