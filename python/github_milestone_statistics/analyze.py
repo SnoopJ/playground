@@ -80,7 +80,7 @@ def plot_entries(entries_by_milestone: dict[str, list[Entry]]):
     H = len(plottable_data)
     fig, axes = plt.subplots(H, W, figsize=(16, 6*H))
     axes = axes.squeeze()
-    fig.suptitle("Sopel over time")
+    fig.suptitle("Sopel over time", x=0.53, y=0.995)
 
     for idx, (milestone, dates, num_open, num_closed) in enumerate(plottable_data):
         axes[idx, 0].plot(dates, num_open, 'rx-')
