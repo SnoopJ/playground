@@ -44,12 +44,13 @@ class Entry:
         return cls(milestones=milestones, created_at=created_at, closed_at=closed_at, **datum)
 
     def is_open_at(self, t: datetime) -> bool:
-        if self.created_at > t or not self.closed_at:
+        if self.created_at > t:
             return False
 
-        if self.closed_at < t:
+        if self.closed_at and self.closed_at < t:
             return False
         else:
+            # item is either never closed, or not yet closed; either way, it's open
             return True
 
 
