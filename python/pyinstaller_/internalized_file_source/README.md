@@ -60,7 +60,6 @@ Traceback (most recent call last):
   File "inspect.py", line 835, in findsource
 OSError: could not get source code
 [515203] Failed to execute script 'main' due to unhandled exception!
-20:29 [jgerity@giskard /tmp/source_sandbox]
 
 
 $ # in the patched bundle, we hook TensorFlow's introspection to use the internalized source code whenever possible
