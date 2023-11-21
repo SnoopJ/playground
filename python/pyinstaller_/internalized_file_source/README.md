@@ -1,6 +1,9 @@
-This is a proof-of-concept of using [`libCST`](https://pypi.org/project/libcst/)
-to internalize the source code of functions and classes in a way that allows
-them to be located by TensorFlow's [AutoGraph](https://www.tensorflow.org/api_docs/python/tf/autograph)
+**NOTE:This workaround is not fully compatible with AutoGraph**
+
+This is a not-quite-working proof-of-concept of using
+[`libCST`](https://pypi.org/project/libcst/) to internalize the source code of
+functions and classes in a way that allows them to be located by TensorFlow's
+[AutoGraph](https://www.tensorflow.org/api_docs/python/tf/autograph)
 functionality even if the `.py` files are not included in the final PyInstaller
 distribution.
 
