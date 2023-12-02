@@ -51,8 +51,7 @@ def first_last_digits(line: str, translate: bool = False) -> int:
         return 0
     result = int(digit_chars[0] + digit_chars[-1])
 
-    LOGGER.debug("[digits]: line=%r -> %r", line, result)
-    print()
+    LOGGER.debug("[digits]: line=%r -> %r\n", line, result)
 
     return result
 
