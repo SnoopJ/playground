@@ -56,6 +56,16 @@ class Game:
         """Determine if the game is possible for a given bag"""
         return all(drw.is_possible(red, green, blue) for drw in self.draws)
 
+    @property
+    def min_cube_power(self) -> tuple[int]:
+        min_cubes = {}
+        for col in ("red", "green", "blue"):
+            min_cubes[col] = max(getattr(drw, col) for drw in self.draws)
+
+        LOGGER.debug(f"Game #%s requires at minimum: %r", self.number, min_cubes)
+
+        return min_cubes["red"] * min_cubes["green"] * min_cubes["blue"]
+
 
 @click.command()
 @click.option('--input', required=True, help="Input file for this day")
@@ -76,8 +86,8 @@ def main(input, debug):
     ans1 = sum(gm.number for gm in games if gm.is_possible(*BAG))
     print(f"Part 1: {ans1}")
 
-#     ans2 = another_miracle_occurs(lines)
-#     print(f"Part 2: {ans2}")
+    ans2 = sum(gm.min_cube_power for gm in games)
+    print(f"Part 2: {ans2}")
 
 
 if __name__ == '__main__':
