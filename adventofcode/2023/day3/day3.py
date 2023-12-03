@@ -36,16 +36,25 @@ class Schematic:
         return len(self.rows[0])
 
     def part_numbers(self) -> Iterable[SchematicPartNumber]:
-        for ridx, r in enumerate(self.rows):
-            for m in re.finditer(r"\d+", r):
+        result = []
+
+        for num, ridx, cidx in self._schematic_numbers():
+            if self.has_symbol_neighbor(ridx, cidx):
+                LOGGER.debug("Found part number at (%s, %s): %s", ridx, cidx, num)
+                pn = SchematicPartNumber(num=num, row=ridx, col=cidx)
+                result.append(pn)
+            else:
+                LOGGER.debug("Number %s at (%s, %s) is NOT a part number", num, ridx, cidx)
+            LOGGER.debug("-"*40)
+
+        return result
+
+    def _schematic_numbers(self) -> Iterable[tuple[int, int, int]]:
+        for ridx, row in enumerate(self.rows):
+            for m in re.finditer(r"\d+", row):
                 cidx = m.start()
                 num = int(m.group())
-                if self.has_symbol_neighbor(ridx, cidx):
-                    LOGGER.debug("Found part number at (%s, %s): %s", ridx, cidx, num)
-                    yield SchematicPartNumber(num=num, row=ridx, col=cidx)
-                else:
-                    LOGGER.debug("Number %s at (%s, %s) is NOT a part number", num, ridx, cidx)
-                LOGGER.debug("-"*40)
+                yield num, ridx, cidx
 
     def has_symbol_neighbor(self, rowidx: int, colidx: int) -> bool:
         col_offset = 0
@@ -91,7 +100,8 @@ def main(input, debug):
     with open(input, "r") as f:
         schematic = Schematic([line.strip() for line in f])
 
-    ans1 = sum(pn.num for pn in schematic.part_numbers())
+    partnums = schematic.part_numbers()
+    ans1 = sum(pn.num for pn in partnums)
     print(f"Part 1: {ans1}")
 
 #     ans2 = another_miracle_occurs(lines)
