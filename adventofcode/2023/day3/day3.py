@@ -25,7 +25,7 @@ class Schematic:
 
     @property
     def ncols(self) -> int:
-        assert len(len(col) == len(self.rows[0]) for col in self.rows[1:]), "Schematic columns are not even-width!"
+        assert len(len(r) == len(self.rows[0]) for r in self.rows[1:]), "Schematic columns are not even-width!"
         return len(self.rows[0])
 
     def part_numbers(self) -> Iterable[int]:
@@ -39,30 +39,30 @@ class Schematic:
                 else:
                     LOGGER.debug("Number %s at (%s, %s) is NOT a part number", num, ridx, cidx)
 
-    def is_part_number(self, row: int, col: int) -> bool:
+    def is_part_number(self, rowidx: int, colidx: int) -> bool:
         col_offset = 0
         while True:
-            cidx = col + col_offset
-            if cidx >= len(self.rows[0]) or not self.rows[row][cidx].isdigit():
+            cidx = colidx + col_offset
+            if cidx >= len(self.rows[0]) or not self.rows[rowidx][cidx].isdigit():
                 break
 
             # if a character is not an "unsymbol" it is a symbol by definition
             # insofar as AoC 2023 is doing """definitions""" anyway :|
-            if any(n not in self.UNSYMS for n in self.neighbors(row, cidx)):
+            if any(n not in self.UNSYMS for n in self.neighbors(rowidx, cidx)):
                 return True
 
             col_offset += 1
 
         return False
 
-    def neighbors(self, row: int, col: int) -> Iterable[str]:
-        assert row >= 0 and col >= 0, "Negative row or column indices not supported"
+    def neighbors(self, rowidx: int, colidx: int) -> Iterable[str]:
+        assert rowidx >= 0 and colidx >= 0, "Negative row or column indices not supported"
 
         for (r_offset, c_offset) in self.neighbor_indices:
-            r = row + r_offset
-            c = col + c_offset
+            r = rowidx + r_offset
+            c = colidx + c_offset
             if r < 0 or c < 0 or r >= len(self.rows) or c >= len(self.rows[0]):
-#                 LOGGER.debug("Skipping off-edge neighbor (%s, %s) of (%s, %s)", r, c, row, col)
+#                 LOGGER.debug("Skipping off-edge neighbor (%s, %s) of (%s, %s)", r, c, rowidx, colidx)
                 continue
 
             yield self.rows[r][c]
