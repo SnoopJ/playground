@@ -4,6 +4,7 @@ import logging
 import re
 import sys
 from dataclasses import dataclass
+from functools import cache
 from typing import Iterable
 
 import click
@@ -19,7 +20,8 @@ class SchematicPartNumber:
     col: int
 
 
-@dataclass
+# NOTE: unsafe_hash here is necessary because of the use of @cache
+@dataclass(unsafe_hash=True)
 class Schematic:
     rows: tuple[str]
 
@@ -35,6 +37,7 @@ class Schematic:
         assert len(len(r) == len(self.rows[0]) for r in self.rows[1:]), "Schematic columns are not even-width!"
         return len(self.rows[0])
 
+    @cache
     def part_numbers(self) -> tuple[SchematicPartNumber]:
         result = []
 
