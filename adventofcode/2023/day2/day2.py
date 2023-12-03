@@ -74,6 +74,7 @@ def main(input, debug):
     logging.basicConfig(
         level=logging.DEBUG if debug else logging.WARNING,
         stream=sys.stdout,
+        format="%(levelname)s: %(message)s",
     )
 
     with open(input, "r") as f:
