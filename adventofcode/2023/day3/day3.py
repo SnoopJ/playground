@@ -13,6 +13,13 @@ LOGGER = logging.getLogger(__name__)
 
 
 @dataclass
+class SchematicPartNumber:
+    num: int
+    row: int
+    col: int
+
+
+@dataclass
 class Schematic:
     rows: list[str]
 
@@ -28,29 +35,31 @@ class Schematic:
         assert len(len(r) == len(self.rows[0]) for r in self.rows[1:]), "Schematic columns are not even-width!"
         return len(self.rows[0])
 
-    def part_numbers(self) -> Iterable[int]:
+    def part_numbers(self) -> Iterable[SchematicPartNumber]:
         for ridx, r in enumerate(self.rows):
             for m in re.finditer(r"\d+", r):
                 cidx = m.start()
                 num = int(m.group())
                 if self.has_symbol_neighbor(ridx, cidx):
                     LOGGER.debug("Found part number at (%s, %s): %s", ridx, cidx, num)
-                    yield num
+                    yield SchematicPartNumber(num=num, row=ridx, col=cidx)
                 else:
                     LOGGER.debug("Number %s at (%s, %s) is NOT a part number", num, ridx, cidx)
+                LOGGER.debug("-"*40)
 
     def has_symbol_neighbor(self, rowidx: int, colidx: int) -> bool:
         col_offset = 0
 
         while True:
             cidx = colidx + col_offset
-            if cidx >= len(self.rows[0]) or not self.rows[rowidx][cidx].isdigit():
+            if cidx < 0 or cidx >= len(self.rows[0]):
                 break
 
             # if a character is not an "unsymbol" it is a symbol by definition
             # insofar as AoC 2023 is doing """definitions""" anyway :|
-            if any(n not in self.UNSYMS for n in self.neighbors(rowidx, cidx)):
-                return True
+            for n in self.neighbors(rowidx, cidx):
+                if n not in self.UNSYMS:
+                    return True
 
             col_offset += 1
 
@@ -82,7 +91,7 @@ def main(input, debug):
     with open(input, "r") as f:
         schematic = Schematic([line.strip() for line in f])
 
-    ans1 = sum(schematic.part_numbers())
+    ans1 = sum(pn.num for pn in schematic.part_numbers())
     print(f"Part 1: {ans1}")
 
 #     ans2 = another_miracle_occurs(lines)
