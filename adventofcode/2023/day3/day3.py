@@ -33,14 +33,15 @@ class Schematic:
             for m in re.finditer(r"\d+", r):
                 cidx = m.start()
                 num = int(m.group())
-                if self.is_part_number(ridx, cidx):
+                if self.has_symbol_neighbor(ridx, cidx):
                     LOGGER.debug("Found part number at (%s, %s): %s", ridx, cidx, num)
                     yield num
                 else:
                     LOGGER.debug("Number %s at (%s, %s) is NOT a part number", num, ridx, cidx)
 
-    def is_part_number(self, rowidx: int, colidx: int) -> bool:
+    def has_symbol_neighbor(self, rowidx: int, colidx: int) -> bool:
         col_offset = 0
+
         while True:
             cidx = colidx + col_offset
             if cidx >= len(self.rows[0]) or not self.rows[rowidx][cidx].isdigit():
