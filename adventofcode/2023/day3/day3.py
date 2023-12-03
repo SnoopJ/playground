@@ -81,7 +81,6 @@ class Schematic:
             r = rowidx + r_offset
             c = colidx + c_offset
             if r < 0 or c < 0 or r >= len(self.rows) or c >= len(self.rows[0]):
-#                 LOGGER.debug("Skipping off-edge neighbor (%s, %s) of (%s, %s)", r, c, rowidx, colidx)
                 continue
 
             yield self.rows[r][c]
