@@ -21,10 +21,10 @@ class SchematicPartNumber:
 
 @dataclass
 class Schematic:
-    rows: list[str]
+    rows: tuple[str]
 
     UNSYMS = ".0123456789"
-    neighbor_indices = list(itertools.product(range(-1, 2), repeat=2))
+    neighbor_indices = tuple(itertools.product(range(-1, 2), repeat=2))
 
     @property
     def nrows(self) -> int:
@@ -35,7 +35,7 @@ class Schematic:
         assert len(len(r) == len(self.rows[0]) for r in self.rows[1:]), "Schematic columns are not even-width!"
         return len(self.rows[0])
 
-    def part_numbers(self) -> Iterable[SchematicPartNumber]:
+    def part_numbers(self) -> tuple[SchematicPartNumber]:
         result = []
 
         for num, ridx, cidx in self._schematic_numbers():
@@ -47,7 +47,7 @@ class Schematic:
                 LOGGER.debug("Number %s at (%s, %s) is NOT a part number", num, ridx, cidx)
             LOGGER.debug("-"*40)
 
-        return result
+        return tuple(result)
 
     def _schematic_numbers(self) -> Iterable[tuple[int, int, int]]:
         for ridx, row in enumerate(self.rows):
@@ -98,7 +98,7 @@ def main(input, debug):
     )
 
     with open(input, "r") as f:
-        schematic = Schematic([line.strip() for line in f])
+        schematic = Schematic(tuple(line.strip() for line in f))
 
     partnums = schematic.part_numbers()
     ans1 = sum(pn.num for pn in partnums)
