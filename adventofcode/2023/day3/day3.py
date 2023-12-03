@@ -13,9 +13,34 @@ import click
 LOGGER = logging.getLogger(__name__)
 
 
-@dataclass
+# NOTE: unsafe_hash here is necessary because of the use of @cache
+@dataclass(unsafe_hash=True)
 class SchematicPartNumber:
     num: int
+    row: int
+    col: int
+
+    @cache
+    def __len__(self):
+        return len(str(self.num))
+
+    def is_neighbor_to(self, ridx: int, cidx: int) -> bool:
+        col_start = min(0, self.col)
+        col_end = self.col + len(self)
+
+        row_dist = abs(ridx - self.row)
+        col_dist_start = abs(cidx - self.col)
+        col_dist_end = abs(cidx - (self.col + len(self) - 1))
+        col_dist = min(col_dist_start, col_dist_end)
+        if row_dist <= 1 and col_dist <= 1:
+            LOGGER.debug("Part number at (%s, %s) is neighbor to (%s, %s)", self.row, self.col, ridx, cidx)
+            return True
+
+        return False
+
+
+@dataclass
+class SchematicGear:
     row: int
     col: int
 
@@ -38,7 +63,7 @@ class Schematic:
         return len(self.rows[0])
 
     @cache
-    def part_numbers(self) -> tuple[SchematicPartNumber]:
+    def part_numbers(self) -> tuple[SchematicPartNumber, ...]:
         result = []
 
         for num, ridx, cidx in self._schematic_numbers():
@@ -49,6 +74,35 @@ class Schematic:
             else:
                 LOGGER.debug("Number %s at (%s, %s) is NOT a part number", num, ridx, cidx)
             LOGGER.debug("-"*40)
+
+        return tuple(result)
+
+    @cache
+    def gear_powers(self) -> tuple[int, ...]:
+        powers = []
+
+        for gr in self.gears():
+            # NOTE: this repeated linear scanning is a little slow, but I can live with it
+            gear_neighbor_parts = [pn for pn in self.part_numbers() if pn.is_neighbor_to(gr.row, gr.col)]
+            LOGGER.debug("Gear %s has neighboring part numbers: %s", gr, gear_neighbor_parts)
+
+            if len(gear_neighbor_parts) == 2:
+                LOGGER.debug("Gear %s has exactly two neighboring part numbers", gr)
+                pwr = gear_neighbor_parts[0].num * gear_neighbor_parts[1].num
+                powers.append(pwr)
+            else:
+                LOGGER.debug("Gear %s does NOT have exactly two neighboring part numbers", gr)
+
+        return tuple(powers)
+
+    def gears(self) -> tuple[SchematicGear, ...]:
+        result = []
+
+        for ridx, row in enumerate(self.rows):
+            for m in re.finditer(r"\*", row):
+                cidx = m.start()
+                gear = SchematicGear(row=ridx, col=cidx)
+                result.append(gear)
 
         return tuple(result)
 
@@ -106,8 +160,8 @@ def main(input, debug):
     ans1 = sum(pn.num for pn in partnums)
     print(f"Part 1: {ans1}")
 
-#     ans2 = another_miracle_occurs(lines)
-#     print(f"Part 2: {ans2}")
+    ans2 = sum(schematic.gear_powers())
+    print(f"Part 2: {ans2}")
 
 
 if __name__ == '__main__':
