@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 """
 This is a helper script designed to run the `ProcDump` tool [1] from
 Sysinternals without a lot of user intervention. It's designed to allow the
