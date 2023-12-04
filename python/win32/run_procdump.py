@@ -9,6 +9,7 @@ user to drag and drop their target program onto this one from the GUI.
 import argparse
 import os
 import runpy
+import ssl
 import subprocess
 import sys
 import time
@@ -26,12 +27,18 @@ PROCDUMP_ZIP_URL = "https://download.sysinternals.com/files/Procdump.zip"
 
 
 parser = argparse.ArgumentParser()
+parser.add_argument("--insecure", action="store_true", help="Disable verification of SSL certificates")
 parser.add_argument("python_program", help="Python program to run using procdump")
 parser.add_argument("python_program_args", nargs="*", help="Arguments passed to the target program")
 
 
-def download_procdump() -> bytes:
-    response = urllib.request.urlopen(PROCDUMP_ZIP_URL)
+def download_procdump(insecure: bool = False) -> bytes:
+    ctx = ssl.create_default_context()
+    if insecure:
+        ctx.check_hostname = False
+        ctx.verify_mode = ssl.CERT_NONE
+
+    response = urllib.request.urlopen(PROCDUMP_ZIP_URL, context=ctx)
     assert response.status == 200, f"Got unexpected HTTP response status {response.status}"
     response_data = BytesIO(response.read())
     zf = ZipFile(response_data)
@@ -48,7 +55,7 @@ if __name__ == "__main__":
 
     if not PROCDUMP_EXE.exists():
         print("Downloading procdump.zip from sysinternals.com")
-        download_procdump()
+        download_procdump(insecure=args.insecure)
 
     assert PROCDUMP_EXE.exists(), f"{str(PRODDUMP_EXE)!r} does not exist!"
 
