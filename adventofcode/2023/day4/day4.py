@@ -1,6 +1,7 @@
 from __future__ import annotations
 import logging
 import sys
+from collections import Counter
 from dataclasses import dataclass
 
 import click
@@ -64,8 +65,19 @@ def main(input, debug):
     ans1 = sum(c.score for c in cards)
     print(f"Part 1: {ans1}")
 
-#     ans2 = another_miracle_occurs(lines)
-#     print(f"Part 2: {ans2}")
+
+    counts = Counter({crd.id: 1 for crd in cards})
+
+    for idx, crd in enumerate(cards, 1):
+        N = len(crd.winning_numbers)
+        to_dupe = [c.id for c in cards[idx:idx + N]]
+        for nxt in to_dupe:
+            cnt = counts[crd.id]
+            LOGGER.debug("Card #%s (%s copies) has %s winners, adding that many copies of cards %r", crd.id, cnt, N, to_dupe)
+            counts[nxt] += cnt
+
+    ans2 = sum(counts.values())
+    print(f"Part 2: {ans2}")
 
 
 if __name__ == '__main__':
