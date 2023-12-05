@@ -15,10 +15,13 @@ class Card:
     nums: tuple[int]
 
     @property
+    def winning_numbers(self) -> set[int]:
+        return self.wins.intersection(self.nums)
+
+    @property
     def score(self) -> int:
-        winning_nums = self.wins.intersection(self.nums)
-        if winning_nums:
-            scr = 2**(len(winning_nums) - 1)
+        if self.winning_numbers:
+            scr = 2**(len(self.winning_numbers) - 1)
         else:
             scr = 0
 
