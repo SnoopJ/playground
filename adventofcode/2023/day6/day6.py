@@ -1,5 +1,6 @@
 from __future__ import annotations
 import logging
+import math
 import operator
 import sys
 from functools import reduce
@@ -11,27 +12,24 @@ LOGGER = logging.getLogger(__name__)
 
 
 CHARGE_RATE = 1  # mm/msec/msec
+def thresholds(T: int, D: int) -> tuple[int, int]:
+    """
+    values of t_c for which the boat will travel farther than the record
 
-def dist(T, tc):
-    return tc * CHARGE_RATE * (T - tc)
+    Δ = D - (tc * CR * (T - tc))
+      = CR * tc² - T*CR * tc + D
+    Δ = 0 →  tc = T*CR ± sqrt(T²*CR² - 4*CR*D) / (2 * CR)
 
+    """
+    CR = CHARGE_RATE
+    negb = T*CR
+    sqrtb2fourac = math.sqrt(T**2 * CR**2 - 4 * CR * D)
+    twoa = (2 * CR)
 
-# NOTE: this approach is very naive, we could do some calculus instead and maybe we'll need to in part 2
-def num_wins(times, dists):
-    nums = []
-    for num, (T, record_dist) in enumerate(zip(times, dists), 1):
-        LOGGER.debug("Considering race #%r of max time %r, record distance is %r", num, T, record_dist)
-        n = 0
-        for tc in range(0, T+1):
-            d = dist(T, tc)
-            if d > record_dist:
-                n += 1
-                LOGGER.debug("Charging for tc=%r msec wins with distance %r", tc, d)
-        LOGGER.debug("%r ways to win", n)
-        nums.append(n)
-        LOGGER.debug("---\n")
+    lo = (negb - sqrtb2fourac) / twoa
+    hi = (negb + sqrtb2fourac) / twoa
 
-    return nums
+    return math.ceil(lo), math.floor(hi + 0.5)
 
 
 @click.command()
@@ -48,11 +46,20 @@ def main(input, debug):
         times = [int(v) for v in next(f).split()[1:]]
         dists = [int(v) for v in next(f).split()[1:]]
 
-    ans1 = reduce(operator.mul, num_wins(times, dists))
+    num_wins = []
+    for T, D in zip(times, dists):
+        lo, hi = thresholds(T, D)
+        num_wins.append(hi - lo)
+    ans1 = reduce(operator.mul, num_wins)
     print(f"Part 1: {ans1}")
 
-#     ans2 = another_miracle_occurs(lines)
-#     print(f"Part 2: {ans2}")
+    # this is a fairly lazy way to concatenate all the digits
+    T = int("".join(str(v) for v in times))
+    D = int("".join(str(v) for v in dists))
+
+    lo, hi = thresholds(T, D)
+    ans2 = hi - lo
+    print(f"Part 2: {ans2}")
 
 
 if __name__ == '__main__':
