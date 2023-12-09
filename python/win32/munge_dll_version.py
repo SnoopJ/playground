@@ -41,57 +41,57 @@ TARGET_FILE = HERE.joinpath("python38.dll")
 
 
 def to_human_ver(ms: int, ls: int):
-    """Given the most/least significant version fields, return a human readable version X.Y.Z.W"""
-    return (
-        ms >> 16,
-        ms & 0xFFFF,
-        ls >> 16,
-        ls & 0xFFFF
-    )
+    """Given the most/least significant version fields, return a human readable version X.Y.Z.W"""
+    return (
+        ms >> 16,
+        ms & 0xFFFF,
+        ls >> 16,
+        ls & 0xFFFF
+    )
 
 
 def to_inhuman_ver(a: int, b: int, c: int, d: int):
-    """Given human readable version X.Y.Z.W, return the most/least significant version fields"""
-    # TODO: what if b,d are too large? round-trips fine as is assuming we asked for something that fits the field
-    ms = (a << 16) + b
-    ls = (c << 16) + d
+    """Given human readable version X.Y.Z.W, return the most/least significant version fields"""
+    # TODO: what if b,d are too large? round-trips fine as is assuming we asked for something that fits the field
+    ms = (a << 16) + b
+    ls = (c << 16) + d
 
-    return ms, ls
+    return ms, ls
 
 
 def main():
-    dll = pefile.PE(TARGET_FILE)
+    dll = pefile.PE(TARGET_FILE)
 
-    assert hasattr(dll, "VS_FIXEDFILEINFO"), f"No file version info present in {TARGET_FILE}"
+    assert hasattr(dll, "VS_FIXEDFILEINFO"), f"No file version info present in {TARGET_FILE}"
 
-    verinfo = dll.VS_FIXEDFILEINFO[0]
-    filever = to_human_ver(verinfo.FileVersionMS, verinfo.FileVersionLS)
-    prodver = to_human_ver(verinfo.ProductVersionMS, verinfo.ProductVersionLS)
+    verinfo = dll.VS_FIXEDFILEINFO[0]
+    filever = to_human_ver(verinfo.FileVersionMS, verinfo.FileVersionLS)
+    prodver = to_human_ver(verinfo.ProductVersionMS, verinfo.ProductVersionLS)
 
-    print(f"Properties of {TARGET_FILE}")
-    print(f"File version: {filever}")
-    print(f"Product version: {prodver}")
+    print(f"Properties of {TARGET_FILE}")
+    print(f"File version: {filever}")
+    print(f"Product version: {prodver}")
 
-    print("Changing file version to 4.0.0.0")
-    new_filever_MS, new_filever_LS = to_inhuman_ver(4, 0, 0, 0)
+    print("Changing file version to 4.0.0.0")
+    new_filever_MS, new_filever_LS = to_inhuman_ver(4, 0, 0, 0)
 
-    verinfo.FileVersionMS = new_filever_MS
-    verinfo.FileVersionLS = new_filever_LS
+    verinfo.FileVersionMS = new_filever_MS
+    verinfo.FileVersionLS = new_filever_LS
 
-    # I tried changing the product name as well, but the changes don't seem to apply. Not sure what I missed,
-    # but that's okay, it's not important to my use-case anyway
+    # I tried changing the product name as well, but the changes don't seem to apply. Not sure what I missed,
+    # but that's okay, it's not important to my use-case anyway
 
-    #print("Changing product version to 3.1.4.1")
-    #new_prodver_MS, new_prodver_LS = to_inhuman_ver(3, 1, 4, 1)
+    #print("Changing product version to 3.1.4.1")
+    #new_prodver_MS, new_prodver_LS = to_inhuman_ver(3, 1, 4, 1)
 
-    #verinfo.ProductVersionMS = new_prodver_MS
-    #verinfo.ProductVersionLS = new_prodver_LS
+    #verinfo.ProductVersionMS = new_prodver_MS
+    #verinfo.ProductVersionLS = new_prodver_LS
 
-    newfile = TARGET_FILE.with_name(TARGET_FILE.stem + ".new" + TARGET_FILE.suffix)
-    print(f"Writing file with new file version to {newfile}")
-    dll.write(newfile)
+    newfile = TARGET_FILE.with_name(TARGET_FILE.stem + ".new" + TARGET_FILE.suffix)
+    print(f"Writing file with new file version to {newfile}")
+    dll.write(newfile)
 
 
 if __name__ == "__main__":
-    main()
+    main()
 
