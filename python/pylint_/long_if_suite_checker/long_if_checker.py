@@ -83,7 +83,7 @@ class LongIfChecker(BaseChecker):
             return
 
         for (n, start, stop) in self._clause_extents(node):
-            if (stop - start) > self.linter.config.max_if_clause_length:
+            if (stop - start) + 1 > self.linter.config.max_if_clause_length:
                 self.add_message(
                     "if-body-too-long",
                     node=n,
