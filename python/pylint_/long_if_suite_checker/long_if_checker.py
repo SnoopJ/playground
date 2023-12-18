@@ -60,9 +60,6 @@ class LongIfChecker(BaseChecker):
             # NOTE: astroid has quirky counting for `else`, so we're
             # effectively off-by-one here
             result.append((n, stop, n.end_lineno))
-#                 print("\t=== Else body ===")
-#                 print(f"\t{n.fromlineno, n.end_lineno}")
-#                 print("\t===\n")
 
         # otherwise, `node` is followed by an `elif`, which is an instance of
         # `nodes.If`, and we'll deal with its contents when we visit it later
@@ -93,7 +90,7 @@ class LongIfChecker(BaseChecker):
                     confidence=HIGH,
                 )
 #         print(f"=== If ===")
-#         print(f"{self._clause_extent(node) = }")
+#         print(f"{self._clause_extents(node) = }")
 #         print("===\n")
 
 
