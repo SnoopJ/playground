@@ -1,5 +1,5 @@
 This is an example of a [custom pylint checker](https://pylint.pycqa.org/en/latest/development_guide/how_tos/custom_checkers.html)
-designed to issue a warning for long `if/elif/else` clauses. The target use-case
+designed to issue a warning for long `if/elif/else` suites. The target use-case
 here is using the linter to identify candidates for refactoring, like:
 
 ```python
@@ -31,7 +31,7 @@ $ PYTHONPATH=$PWD \
     --load-plugins=long_if_checker \
     --disable=all \
     --enable=if-body-too-long \
-    --max-if-clause-length=50 \
+    --max-if-suite-length=50 \
     target_program.py
 
 $ PYTHONPATH=$PWD \
@@ -40,7 +40,7 @@ $ PYTHONPATH=$PWD \
     --load-plugins=long_if_checker \
     --disable=all \
     --enable=if-body-too-long \
-    --max-if-clause-length=1 \
+    --max-if-suite-length=1 \
     target_program.py
 ************* Module target_program
 target_program.py:9:0: W8900: overlong suite body (if-body-too-long)
@@ -53,7 +53,7 @@ $ PYTHONPATH=$PWD \
     --load-plugins=long_if_checker \
     --disable=all \
     --enable=if-body-too-long \
-    --max-if-clause-length=0 \
+    --max-if-suite-length=0 \
     --check-pure-if-length=y \
     target_program.py  # NOTE: Line 38 is reported
 ************* Module target_program
@@ -70,7 +70,7 @@ $ PYTHONPATH=$PWD \
     --load-plugins=long_if_checker \
     --disable=all \
     --enable=if-body-too-long \
-    --max-if-clause-length=0 \
+    --max-if-suite-length=0 \
     --check-pure-if-length=n \
     target_program.py  # NOTE: Line 38 is NOT reported
 ************* Module target_program
@@ -83,9 +83,9 @@ target_program.py:43:0: W8900: overlong conditional body (if-body-too-long)
 
 ## Inconsistent treatment of `else` length
 
-Note that `astroid` treats `else` clauses different from `if/elif`, so the
-line number reported for a too-long `else` clause will be the first line in
-the body of the clause, but the report for `if/elif` will be the line containing
+Note that `astroid` treats `else` suites different from `if/elif`, so the
+line number reported for a too-long `else` suite will be the first line in
+the body of the suite, but the report for `if/elif` will be the line containing
 the predicate. It is easier for this proof-of-concept to accept this quirk
 than to try and work around it, but it's worth mentioning since it means there
-is an off-by-one to the length counting of these clauses.
+is an off-by-one to the length counting of these suites.

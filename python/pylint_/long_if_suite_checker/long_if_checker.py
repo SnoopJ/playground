@@ -14,7 +14,7 @@ Extent = tuple[nodes.NodeNG, int, int]
 
 class LongIfChecker(BaseChecker):
 
-    name = "long-if-clause"
+    name = "long-if-suite"
     msgs = {
         # NOTE: pylint code prefixes 51-99 are reserved for external checkers, see:
         # https://github.com/pylint-dev/pylint/blob/v3.0.3/pylint/checkers/__init__.py#L37
@@ -22,17 +22,17 @@ class LongIfChecker(BaseChecker):
         "W8900": (
             "overlong conditional body",
             "if-body-too-long",
-            "If/elif/else clause should be shorter",
+            "If/elif/else suite should be shorter",
         ),
     }
     options = (
         (
-            "max-if-clause-length",
+            "max-if-suite-length",
             {
                 "default": 50,
                 "type": "int",
                 "metavar": "<int>",
-                "help": "Maximum length of an if/elif/else clause",
+                "help": "Maximum length of an if/elif/else suite",
             },
         ),
         (
@@ -56,7 +56,7 @@ class LongIfChecker(BaseChecker):
         result.append((node, start, stop))
 
         if not isinstance(n, nodes.If):
-            # edge case: `else` clause
+            # edge case: `else` suite
             # NOTE: astroid has quirky counting for `else`, so we're
             # effectively off-by-one here
             result.append((n, stop, n.end_lineno))
@@ -65,32 +65,32 @@ class LongIfChecker(BaseChecker):
         # `nodes.If`, and we'll deal with its contents when we visit it later
         return result
 
-    def _clause_extents(self, node: nodes.If) -> list[Extent]:
+    def _suite_extents(self, node: nodes.If) -> list[Extent]:
         if not node.orelse:
-            # no `elif, else` clause, end_lineno is the true end of this clause
+            # no `elif, else` suite, end_lineno is the true end of this suite
             start = node.fromlineno
             stop = node.end_lineno
             result = [(node, node.fromlineno, node.end_lineno)]
         else:
-            # there is an `elif` or `else` clause to deal with
+            # there is an `elif` or `else` suite to deal with
             result = self._elif_or_else_extents(node)
 
         return result
 
     def visit_if(self, node: nodes.If) -> None:
         if not self.linter.config.check_pure_if_length and not node.orelse:
-            # user has opted out of checking `if` clauses without an `elif/else`
+            # user has opted out of checking `if` suites without an `elif/else`
             return
 
-        for (n, start, stop) in self._clause_extents(node):
-            if (stop - start) + 1 > self.linter.config.max_if_clause_length:
+        for (n, start, stop) in self._suite_extents(node):
+            if (stop - start) + 1 > self.linter.config.max_if_suite_length:
                 self.add_message(
                     "if-body-too-long",
                     node=n,
                     confidence=HIGH,
                 )
 #         print(f"=== If ===")
-#         print(f"{self._clause_extents(node) = }")
+#         print(f"{self._suite_extents(node) = }")
 #         print("===\n")
 
 
