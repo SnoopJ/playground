@@ -35,6 +35,15 @@ class LongIfChecker(BaseChecker):
                 "help": "Maximum length of an if/elif/else clause",
             },
         ),
+        (
+            "check-pure-if-length",
+            {
+                "default": True,
+                "type": "yn",
+                "metavar": "<y or n>",
+                "help": "Check the length of if statments without elif/else",
+            },
+        ),
     )
 
     def _elif_or_else_extents(self, node: nodes.If) -> list[Extent]:
@@ -72,6 +81,10 @@ class LongIfChecker(BaseChecker):
         return result
 
     def visit_if(self, node: nodes.If) -> None:
+        if not self.linter.config.check_pure_if_length and not node.orelse:
+            # user has opted out of checking `if` clauses without an `elif/else`
+            return
+
         for (n, start, stop) in self._clause_extents(node):
             if (stop - start) > self.linter.config.max_if_clause_length:
                 self.add_message(

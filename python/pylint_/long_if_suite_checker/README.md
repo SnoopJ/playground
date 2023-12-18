@@ -46,6 +46,39 @@ $ PYTHONPATH=$PWD \
 target_program.py:9:0: W8900: overlong suite body (if-body-too-long)
 target_program.py:18:0: W8900: overlong suite body (if-body-too-long)
 target_program.py:28:4: W8900: overlong suite body (if-body-too-long)
+
+$ PYTHONPATH=$PWD \
+  python3 -m pylint \
+    --score=n \
+    --load-plugins=long_if_checker \
+    --disable=all \
+    --enable=if-body-too-long \
+    --max-if-clause-length=0 \
+    --check-pure-if-length=y \
+    target_program.py  # NOTE: Line 38 is reported
+************* Module target_program
+target_program.py:9:0: W8900: overlong conditional body (if-body-too-long)
+target_program.py:18:0: W8900: overlong conditional body (if-body-too-long)
+target_program.py:28:4: W8900: overlong conditional body (if-body-too-long)
+target_program.py:38:0: W8900: overlong conditional body (if-body-too-long)
+target_program.py:42:0: W8900: overlong conditional body (if-body-too-long)
+target_program.py:43:0: W8900: overlong conditional body (if-body-too-long)
+
+$ PYTHONPATH=$PWD \
+  python3 -m pylint \
+    --score=n \
+    --load-plugins=long_if_checker \
+    --disable=all \
+    --enable=if-body-too-long \
+    --max-if-clause-length=0 \
+    --check-pure-if-length=n \
+    target_program.py  # NOTE: Line 38 is NOT reported
+************* Module target_program
+target_program.py:9:0: W8900: overlong conditional body (if-body-too-long)
+target_program.py:18:0: W8900: overlong conditional body (if-body-too-long)
+target_program.py:28:4: W8900: overlong conditional body (if-body-too-long)
+target_program.py:42:0: W8900: overlong conditional body (if-body-too-long)
+target_program.py:43:0: W8900: overlong conditional body (if-body-too-long)
 ```
 
 ## Inconsistent treatment of `else` length
