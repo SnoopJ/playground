@@ -46,34 +46,19 @@ class LongIfChecker(BaseChecker):
         ),
     )
 
-    def _elif_or_else_extents(self, node: nodes.If) -> list[Extent]:
-        result = []
-        start = node.fromlineno
-
-        n = node.orelse[0]
-        stop = n.fromlineno
-
-        result.append((node, start, stop))
-
-        if not isinstance(n, nodes.If):
-            # edge case: `else` suite
-            # NOTE: astroid has quirky counting for `else`, so we're
-            # effectively off-by-one here
-            result.append((n, stop, n.end_lineno))
-
-        # otherwise, `node` is followed by an `elif`, which is an instance of
-        # `nodes.If`, and we'll deal with its contents when we visit it later
-        return result
-
     def _suite_extents(self, node: nodes.If) -> list[Extent]:
-        if not node.orelse:
-            # no `elif, else` suite, end_lineno is the true end of this suite
-            start = node.fromlineno
-            stop = node.end_lineno
-            result = [(node, node.fromlineno, node.end_lineno)]
-        else:
-            # there is an `elif` or `else` suite to deal with
-            result = self._elif_or_else_extents(node)
+        start = node.body[0].fromlineno
+        stop = node.body[-1].end_lineno
+        result = [(node, start, stop)]
+
+        if node.orelse:
+            # `elif` or `else` suite is present
+            n = node.orelse[0]
+            if not isinstance(n, nodes.If):
+                # there is an `else` suite, we must also count its body here
+                result.append((n, n.fromlineno, n.end_lineno))
+            # otherwise, `node` is followed by an `elif`, which is an instance of
+            # `nodes.If`, and we'll deal with its contents when we visit it later
 
         return result
 

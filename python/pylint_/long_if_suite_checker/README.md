@@ -55,14 +55,17 @@ $ PYTHONPATH=$PWD \
     --enable=if-body-too-long \
     --max-if-suite-length=0 \
     --check-pure-if-length=y \
-    target_program.py  # NOTE: Line 38 is reported
+    target_program.py  # NOTE: Lines 38 and 42 are reported
 ************* Module target_program
 target_program.py:9:0: W8900: overlong conditional body (if-body-too-long)
 target_program.py:18:0: W8900: overlong conditional body (if-body-too-long)
 target_program.py:28:4: W8900: overlong conditional body (if-body-too-long)
 target_program.py:38:0: W8900: overlong conditional body (if-body-too-long)
 target_program.py:42:0: W8900: overlong conditional body (if-body-too-long)
-target_program.py:43:0: W8900: overlong conditional body (if-body-too-long)
+target_program.py:49:0: W8900: overlong conditional body (if-body-too-long)
+target_program.py:50:0: W8900: overlong conditional body (if-body-too-long)
+target_program.py:51:6: W8900: overlong conditional body (if-body-too-long)
+
 
 $ PYTHONPATH=$PWD \
   python3 -m pylint \
@@ -72,20 +75,12 @@ $ PYTHONPATH=$PWD \
     --enable=if-body-too-long \
     --max-if-suite-length=0 \
     --check-pure-if-length=n \
-    target_program.py  # NOTE: Line 38 is NOT reported
+    target_program.py  # NOTE: Lines 38 and 42 are NOT reported
 ************* Module target_program
 target_program.py:9:0: W8900: overlong conditional body (if-body-too-long)
 target_program.py:18:0: W8900: overlong conditional body (if-body-too-long)
 target_program.py:28:4: W8900: overlong conditional body (if-body-too-long)
-target_program.py:42:0: W8900: overlong conditional body (if-body-too-long)
-target_program.py:43:0: W8900: overlong conditional body (if-body-too-long)
+target_program.py:49:0: W8900: overlong conditional body (if-body-too-long)
+target_program.py:50:0: W8900: overlong conditional body (if-body-too-long)
+target_program.py:51:6: W8900: overlong conditional body (if-body-too-long)
 ```
-
-## Inconsistent treatment of `else` length
-
-Note that `astroid` treats `else` suites different from `if/elif`, so the
-line number reported for a too-long `else` suite will be the first line in
-the body of the suite, but the report for `if/elif` will be the line containing
-the predicate. It is easier for this proof-of-concept to accept this quirk
-than to try and work around it, but it's worth mentioning since it means there
-is an off-by-one to the length counting of these suites.
