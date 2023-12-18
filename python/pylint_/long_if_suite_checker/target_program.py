@@ -39,6 +39,13 @@ if predicate_a():
     z = -1
 
 
+if (
+    predicate_a() and
+    predicate_b()
+    ):
+    z = 1
+
+
 if True: 1
 elif predicate_a(): 2
 else: 3
