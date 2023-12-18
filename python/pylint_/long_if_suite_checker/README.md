@@ -31,7 +31,7 @@ $ PYTHONPATH=$PWD \
     --load-plugins=long_if_checker \
     --disable=all \
     --enable=if-body-too-long \
-    --max-if-clause-length 50 \
+    --max-if-clause-length=50 \
     target_program.py
 
 $ PYTHONPATH=$PWD \
@@ -40,7 +40,7 @@ $ PYTHONPATH=$PWD \
     --load-plugins=long_if_checker \
     --disable=all \
     --enable=if-body-too-long \
-    --max-if-clause-length 1 \
+    --max-if-clause-length=1 \
     target_program.py
 ************* Module target_program
 target_program.py:9:0: W8900: overlong suite body (if-body-too-long)
