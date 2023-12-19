@@ -8,8 +8,19 @@ from .config import AcmeConfig
 class DelayedLoggerAdapter(logging.LoggerAdapter):
     def __init__(self, logger):
         super().__init__(logger, extra={})
-        self.delayed = True
+        self._delayed = True
         self._delayed_logs = []
+
+    @property
+    def delayed(self):
+        return self._delayed
+
+    @delayed.setter
+    def delayed(self, val):
+        if val and self.delayed:
+            # going from delayed to un-delayed, flush cache
+            self._flush_delayed()
+        self._delayed = val
 
     def log(self, level, msg, *args, **kwargs):
         # we adjust the default stacklevel offset to account for two additional
