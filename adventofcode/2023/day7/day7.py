@@ -3,17 +3,18 @@ import logging
 import sys
 from collections import Counter
 from enum import IntEnum
+from functools import partial
 
 import click
 
 
 LOGGER = logging.getLogger(__name__)
 
-# lowest to highest rank
+# lowest to highest card rank
 CARD_RANK = "23456789TJQKA"
 
 class HandType(IntEnum):
-    # lowest to highest rank
+    # lowest to highest type rank
     HIGH_CARD = 0
     ONE_PAIR = 1
     TWO_PAIR = 2
@@ -21,6 +22,7 @@ class HandType(IntEnum):
     FULL_HOUSE = 4
     FOUR_OF_A_KIND = 5
     FIVE_OF_A_KIND = 6
+
 
 TYPE_BY_COUNTS = {
     (5,): HandType.FIVE_OF_A_KIND,
@@ -33,22 +35,46 @@ TYPE_BY_COUNTS = {
 }
 
 
-def hand_type(hand: str) -> HandType:
+def hand_type(hand: str, wildcards: bool = False) -> HandType:
     assert len(hand) == 5, "A Camel Cards hand must be exactly 5 cards"
     cnt = Counter(hand)
     counts = sorted(cnt.values(), reverse=True)
-    return TYPE_BY_COUNTS[tuple(counts)]
+    base_type = TYPE_BY_COUNTS[tuple(counts)]
+    num_wildcards = hand.count("J")
+    if wildcards and num_wildcards:
+        counts.remove(num_wildcards)
+        if not counts:
+            # edge case: five wildcards, we already have the best hand type possible
+            result = HandType.FIVE_OF_A_KIND
+        else:
+            # take the wildcards out of the hand and add their count to the
+            # next-largest count to promote this hand to the best possible hand
+            counts[0] += num_wildcards
+            result = TYPE_BY_COUNTS[tuple(counts)]
+    else:
+        result = base_type
+
+    return result
 
 
-def _rank_key(hand_bid_pair):
+def _hand_sort_key(hand_bid_pair, wildcards: bool = False):
     hand, bid = hand_bid_pair
-    return hand_type(hand), [CARD_RANK.index(c) for c in hand]
+    if wildcards:
+        # wildcards have the lowest possible card rank
+        index_key = [CARD_RANK.index(c) if c != "J" else -1 for c in hand]
+    else:
+        index_key = [CARD_RANK.index(c) for c in hand]
+    type_key = hand_type(hand, wildcards=wildcards)
+
+    return type_key, index_key
 
 
-def winnings(plays) -> int:
+def winnings(plays, wildcards: bool = False) -> int:
     winnings = 0
-    for rank, (hand, bid) in enumerate(sorted(plays, key=_rank_key), 1):
-        LOGGER.debug(f"{hand = } with {bid = } has {rank = }")
+    rank_key = partial(_hand_sort_key, wildcards=wildcards)
+    for rank, (hand, bid) in enumerate(sorted(plays, key=rank_key), 1):
+        hnd_t = hand_type(hand, wildcards=wildcards)
+        LOGGER.debug(f"{hand = } with {bid = } is of type = {hnd_t!r} has {rank = }")
         winnings += rank * int(bid)
 
     return winnings
@@ -70,8 +96,8 @@ def main(input, debug):
     ans1 = winnings(plays)
     print(f"Part 1: {ans1}")
 
-#     ans2 = another_miracle_occurs(lines)
-#     print(f"Part 2: {ans2}")
+    ans2 = winnings(plays, wildcards=True)
+    print(f"Part 2: {ans2}")
 
 
 if __name__ == '__main__':
