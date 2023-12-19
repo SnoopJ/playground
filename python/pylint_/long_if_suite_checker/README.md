@@ -14,6 +14,16 @@ else:
 Which is almost always be better expressed as some variation of:
 
 ```python
+def handle_something(state):
+    # 50 lines of code
+
+def handle_something_else(state):
+    # 50 more lines of code
+
+def handle_else(state):
+    # 50 final lines of code
+
+
 if something():
     handle_something(state)
 elif something_else():
