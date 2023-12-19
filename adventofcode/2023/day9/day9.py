@@ -30,11 +30,19 @@ def main(input, debug):
     with open(input, "r") as f:
         histories = [[int(val) for val in line.split()] for line in f]
 
-    ans1 = sum(sum(diff[-1] for diff in differences(hist)) for hist in histories)
+    ans1 = 0
+    for hist in histories:
+        diffs = differences(hist)
+        ans1 += sum(d[-1] for d in diffs)
     print(f"Part 1: {ans1}")
 
-#     ans2 = another_miracle_occurs(lines)
-#     print(f"Part 2: {ans2}")
+    ans2 = 0
+    for hist in histories:
+        diffs = differences(hist)
+        # alternating series:
+        # a₀ = a₁ - b₁ + c₁ - d₁ + …
+        ans2 += sum((-1)**n * d[0] for n, d in enumerate(diffs))
+    print(f"Part 2: {ans2}")
 
 
 if __name__ == '__main__':
