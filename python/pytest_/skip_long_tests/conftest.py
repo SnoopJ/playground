@@ -8,11 +8,26 @@ def pytest_addoption(parser):
         default=False,
         help="Run slow tests",
     )
+    parser.addoption(
+        "--reorder-slow",
+        action="store_true",
+        default=False,
+        help="Order slow tests last",
+    )
 
 
 def pytest_collection_modifyitems(config, items):
-    if not config.getoption("--run-slow"):
-        skipper = pytest.mark.skip(reason="Test is marked slow and --run-slow was not given")
-        for item in items:
-            if "slow" in item.keywords:
+    skipper = pytest.mark.skip(reason="Test is marked slow and --run-slow was not given")
+    pops = []
+    for idx, item in enumerate(items):
+        if "slow" in item.keywords:
+            pops.append(idx)
+
+            if not config.getoption("--run-slow"):
                 item.add_marker(skipper)
+
+    if config.getoption("--reorder-slow"):
+        reordered = []
+        for idx in reversed(pops):
+            reordered.append(items.pop(idx))
+        items.extend(reversed(reordered))
