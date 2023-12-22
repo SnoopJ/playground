@@ -1,5 +1,5 @@
 This is a small script for scraping the [Unicode Technical Committee (UTC) Document Register](https://www.unicode.org/L2/L-curdoc.htm)
-and producing an RSS feed with one entry per document in the register.
+and producing [an RSS feed](https://snoopj.dev/files/UTC_register.xml) with one entry per document in the register.
 
 ```
 $ python3 scrape_UTC_register.py
