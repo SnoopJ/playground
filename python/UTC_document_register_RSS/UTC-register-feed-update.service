@@ -1,0 +1,12 @@
+[Unit]
+Description=Regularly update UTC document register feed
+Requires=local-fs.target
+After=local-fs.target
+
+[Service]
+Type=simple
+ExecStart=/home/snoopjedi/playground/python/UTC_document_register_RSS/venv/bin/python3 /home/snoopjedi/playground/python/UTC_document_register_RSS/scrape_UTC_register.py --no-cache --outfile /var/www/html/files/UTC_register.xml
+User=snoopjedi
+
+[Install]
+WantedBy=multi-user.target
