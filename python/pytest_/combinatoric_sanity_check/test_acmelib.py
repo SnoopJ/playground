@@ -25,7 +25,7 @@ def test_run_job(comb):
     assert run_job(*comb)
 
 
-@pytest.mark.last  # pytest-order
+@pytest.mark.order("last")  # pytest-order
 def test_saw_all_outputformat():
     missing_output_formats = [name for name, val in ACMELIB_OUTFMT_MAP.items() if not val]
     assert not missing_output_formats, f"Missing some output formats: {missing_output_formats}"
