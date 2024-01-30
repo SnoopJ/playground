@@ -18,18 +18,12 @@ def example():
 print("First example: expect two messages\n---")
 example()
 
-
-def myfilter(record):
-    # https://docs.python.org/3/library/logging.html#filter-objects
-    if record.name.startswith("somelib"):
-        return False
-    else:
-        return True
+class MyFilter(logging.Filter):
+    def filter(self, record):
+        return record.name.startswith("somelib")
 
 
-# NOTE: I find this a little confusing because it seems the filter should be
-# added to the handler(s) in question, NOT the Logger instances
-logging.root.handlers[0].addFilter(myfilter)
+logger.addFilter(MyFilter())
 
 print("Second example: expect one message\n---")
 example()
