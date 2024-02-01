@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+py-modules = ["snoopj_program"]
+
+[project]
+name = "snoopj-packagized-script"
+version = "1.0"
+description = "A little example of a script turned into an installable package"
+dependencies = ["appdirs"]
+
+[project.scripts]
+snoopj_cmd = "snoopj_program:main"
