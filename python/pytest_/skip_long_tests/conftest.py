@@ -1,16 +1,27 @@
+import argparse
+import sys
+
 import pytest
+
+
+if sys.version_info >= (3, 9):
+    # NOTE: requires Python 3.9+, but provides --no-<option> as well
+    BOOLEAN_ACTION = argparse.BooleanOptionalAction
+else:
+    # NOTE: works in Python 3.8 and prior, but does not provide --no-<option>
+    BOOLEAN_ACTION = "store_true"
 
 
 def pytest_addoption(parser):
     parser.addoption(
         "--run-slow",
-        action="store_true",
+        action=BOOLEAN_ACTION,
         default=False,
         help="Run slow tests",
     )
     parser.addoption(
         "--reorder-slow",
-        action="store_true",
+        action=BOOLEAN_ACTION,
         default=False,
         help="Order slow tests last",
     )
