@@ -17,6 +17,10 @@ def wrap_node_print(node: ast.Expr) -> None:
     """Helper to transform an `Expr` into the equivalent form wrapped in `print()`"""
 
     val = node.value
+    # NOTE: the below is being pretty lazy about column offsets, pretending that the
+    # print() is basically not present. The Right Way™ to do this is to add an additional
+    # offset to the old node's column offsets. The main side effect of this is that error
+    # reports that refer to a particular location in a line will be wrong if a print() was added to that line
     node.value = ast.Call(
         lineno=node.lineno,
         col_offset=node.lineno,
