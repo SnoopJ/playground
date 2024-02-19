@@ -9,7 +9,7 @@ class LastExprPrintTransformer(ast.NodeVisitor):
     def visit_Expr(self, node):
         self.lastexpr = node
 
-        if isinstance(node.value, ast.Call) and node.value.func.id == "print":
+        if isinstance(node.value, ast.Call) and getattr(node.value.func, "id", "") == "print":
             self.print_seen = True
 
 
