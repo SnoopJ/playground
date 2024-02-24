@@ -1,9 +1,10 @@
 import ast
 
 
-class LastExprPrintTransformer(ast.NodeVisitor):
+class LastExprPrintTransformer(ast.NodeTransformer):
     """A helper class for finding `print()` and storing the last `Expr` in an AST"""
     def __init__(self):
+        self.lastexpr = None
         self.print_seen = False
 
     def visit_Expr(self, node):
@@ -11,6 +12,8 @@ class LastExprPrintTransformer(ast.NodeVisitor):
 
         if isinstance(node.value, ast.Call) and getattr(node.value.func, "id", "") == "print":
             self.print_seen = True
+
+        return node
 
 
 def wrap_node_print(node: ast.Expr) -> None:
@@ -47,6 +50,10 @@ def maybe_print_last(src: str) -> str:
     lept = LastExprPrintTransformer()
 
     new_module = lept.visit(module)
+    if not lept.lastexpr:
+        # edge case: there is no last expression!
+        return src
+
     if not lept.print_seen:
         wrap_node_print(lept.lastexpr)
 
@@ -58,11 +65,13 @@ if __name__ == "__main__":
     TEST_PROGRAMS = [
         "1 + 1",
         "1 + 1\nprint(42)",
+        "import os",
     ]
 
     for src in TEST_PROGRAMS:
-        print("Input source:\n=============")
+        print("Input source:\n==============")
         print(src)
 
-        print("\nOutput source:\n=============")
+        print("\nOutput source:\n==============")
         print(maybe_print_last(src))
+        print("\n--------------\n")
