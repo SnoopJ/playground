@@ -17,15 +17,15 @@ def wrap_node_print(node: ast.Expr) -> None:
     """Helper to transform an `Expr` into the equivalent form wrapped in `print()`"""
 
     val = node.value
-    # NOTE: the below is being pretty lazy about column offsets, pretending that the
-    # print() is basically not present. The Right Way™ to do this is to add an additional
-    # offset to the old node's column offsets. The main side effect of this is that error
-    # reports that refer to a particular location in a line will be wrong if a print() was added to that line
-    node.value = ast.Call(
+    # NOTE:the column offsets here are pretty wrong, but the result of this helper is passed pretty much
+    # directly into `ast.unparse()` which doesn't use the column offset information anyway. When the transformed
+    # program is run through the WASI CPython's parser, the column offsets will be *correct*, so despite the mild
+    # evil on display here, errors reported by the bot include correct column indicators
+    repr_node = ast.Call(
         lineno=node.lineno,
-        col_offset=node.lineno,
+        col_offset=-1,
         end_lineno=node.end_lineno,
-        end_col_offset=node.end_col_offset,
+        end_col_offset=-1,
         func=ast.Name(
             lineno=node.lineno,
             col_offset=-1,
