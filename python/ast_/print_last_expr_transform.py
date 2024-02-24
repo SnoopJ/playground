@@ -17,7 +17,7 @@ class LastExprPrintTransformer(ast.NodeTransformer):
 
 
 def wrap_node_print(node: ast.Expr) -> None:
-    """Helper to transform an `Expr` into the equivalent form wrapped in `print()`"""
+    """Helper to transform an `Expr` into the equivalent form wrapped in `print(repr(…))`"""
 
     val = node.value
     # NOTE:the column offsets here are pretty wrong, but the result of this helper is passed pretty much
@@ -34,17 +34,34 @@ def wrap_node_print(node: ast.Expr) -> None:
             col_offset=-1,
             end_lineno=node.end_lineno,
             end_col_offset=-1,
-            id='print',
+            id='repr',
             ctx=ast.Load(),
         ),
         args=[val],
         keywords=[],
     )
 
+    node.value = ast.Call(
+        lineno=node.lineno,
+        col_offset=-1,
+        end_lineno=node.end_lineno,
+        end_col_offset=-1,
+        func=ast.Name(
+            lineno=node.lineno,
+            col_offset=-1,
+            end_lineno=node.end_lineno,
+            end_col_offset=-1,
+            id='print',
+            ctx=ast.Load(),
+        ),
+        args=[repr_node],
+        keywords=[ast.keyword(arg="end", value=ast.Constant(""))],
+    )
+
 
 
 def maybe_print_last(src: str) -> str:
-    """Wrap a `print()` around the last expression in the given source code, if no other `print()` is present"""
+    """Wrap a `print(repr(…))` around the last expression in the given source code, if no other `print()` is present"""
     module = ast.parse(src)
 
     lept = LastExprPrintTransformer()
