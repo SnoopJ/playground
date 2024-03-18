@@ -23,7 +23,7 @@ def _get_socket() -> socket.socket:
     try:
         sock = socket.create_server((HOST, CANONICAL_PORT))
     except:
-        print(f"Could not bind to {(HOST, CANONICAL_PORT)}, binding ephemeral port")
+        print(f"Could not bind to {(HOST, CANONICAL_PORT)}, binding to OS-allocated port")
         sock = socket.create_server((HOST, 0))
 
     return sock
