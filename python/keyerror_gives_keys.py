@@ -6,7 +6,7 @@ index something.
 This code is specific to dicts, but the approach could probably be generalized
 to handle other mapping types. This helper will only succeed in the case where
 the KeyError is originating from code like `dict_name[key_name]`. In these
-cases, the compiled CPython will be something like:
+cases, the compiled bytecode will be something like:
 
 ```
 N-4 LOAD_NAME                0 (dict_name)
