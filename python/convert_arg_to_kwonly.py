@@ -5,8 +5,20 @@ This is probably not useful to do in production code, but I found myself wonderi
 some upstream code that *really* should have not let me pass some parameters by position
 """
 import inspect
+import os
+import sys
 from collections.abc import Callable
 from typing import Any
+
+
+if os.environ.get("NO_COLOR") or not sys.stdout.isatty():
+    # https://no-color.org/
+    RED = GREEN = BLUE = RESET = ''
+else:
+    RED = '\033[31m'
+    GREEN = '\033[32m'
+    BLUE = '\033[34m'
+    RESET = '\033[39m'
 
 
 def func(val, obscure_param1, obscure_param2):
@@ -50,15 +62,17 @@ args = [
     ("obscure_param2", 3)
 ]
 for f in functions:
-    print(f"{f.__name__}():\n  {inspect.getfullargspec(f)}\n==============")
+    argspec = inspect.getfullargspec(f)
+    arg_summary = f"  args        = {argspec.args!r}\n  kwonlyargs  = {argspec.kwonlyargs!r}"
+    print(f"{f.__name__}():\n{BLUE}{arg_summary}{RESET}\n==============")
     for n in range(3, -1, -1):
         posargs = [val for (name, val) in args[:n]]
         kwargs = {name:val for (name, val) in args[n:]}
         try:
             f(*posargs, **kwargs)
-            print(f"SUCCESS: called with {n} positional arguments, {3-n} keyword arguments")
+            print(f"{GREEN}SUCCESS{RESET}: called with {n} positional arguments, {3-n} keyword arguments")
         except:
-            print(f"FAILED: called with {n} positional arguments, {3-n} keyword arguments")
+            print(f"{RED}FAILED{RESET}: called with {n} positional arguments, {3-n} keyword arguments")
     print()
 
 # Output:
