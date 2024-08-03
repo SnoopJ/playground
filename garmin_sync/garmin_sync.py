@@ -5,6 +5,7 @@ contained therein overlaid on map tiles from OpenStreetMap
 """
 import itertools
 import math
+import os
 import shutil
 from pathlib import Path
 
