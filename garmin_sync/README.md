@@ -8,10 +8,6 @@ that `systemd` is responsible for mounts on the system. It also assumes the
 presence of Python 3.9 or higher and the dependencies listed in
 `requirements.txt`.
 
-## Example output
-
-![Map of the central Boston metropolitan area, with GPS traces overlaid](example_out.png)
-
 ## Usage
 
 To use this service for your own system/device:
@@ -25,3 +21,8 @@ To use this service for your own system/device:
 
 * Copy the renamed `.mount.d` directory to `/etc/systemd/system/`, and install
   the edited `garmin-sync.service`
+
+## Example output
+
+![Map of the central Boston metropolitan area, with GPS traces overlaid](example_out.png)
+
