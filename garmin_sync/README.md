@@ -22,6 +22,9 @@ To use this service for your own system/device:
 * Copy the renamed `.mount.d` directory to `/etc/systemd/system/`, and install
   the edited `garmin-sync.service`
 
+You might also need to "prime the pump" and give the service its first start
+manually. I dunno, `systemd` is a confusing labyrinth.
+
 ## Example output
 
 ![Map of the central Boston metropolitan area, with GPS traces overlaid](example_out.png)
