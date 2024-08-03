@@ -172,6 +172,7 @@ def plot(fits_files, osm: bool = True):
 
     plt.xlabel('longitude')
     plt.ylabel('latitude')
+    plt.tight_layout()
 
     outfn = HERE.joinpath("out.png")
     plt.savefig(outfn)
