@@ -1,0 +1,12 @@
+[Unit]
+Description=Synchronize Garmin watch files
+Requires=path-to-GARMIN.mount  # TODO: replace with the name of your mount unit
+After=path-to-GARMIN.mount  # TODO: replace with the name of your mount unit
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 /path/to/garmin_sync.py  # TODO: replace with your path to garmin_sync.py
+User=yourusername  # TODO: replace with your username
+
+[Install]
+WantedBy=multi-user.target

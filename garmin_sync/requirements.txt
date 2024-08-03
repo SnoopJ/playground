@@ -1,0 +1,5 @@
+garmin-fit-sdk >=21.141.0, <22
+matplotlib >=3.5.1, <4
+numpy >=1.20, <2
+Pillow >=9, <10
+requests>=2.25.1, <3
