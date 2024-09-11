@@ -1,0 +1,13 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+fail_fast: true
+repos:
+-   repo: local
+    hooks:
+    -   id: jenkins-lint
+        name: Lint Jenkinsfile(s)
+        language: script
+        types: [jenkins]
+        entry: jenkins_lint_hook.py
+        args: ["--precommit-mode"]
+        verbose: true
