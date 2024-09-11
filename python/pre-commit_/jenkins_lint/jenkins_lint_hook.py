@@ -93,6 +93,6 @@ if __name__ == "__main__":
             f"{ANSI_BOLD}{ANSI_RED}Jenkins authentication must be provided, either by --username and --token, or with "
             "the JENKINS_AUTH environment variable"
         )
-        sys.exit(1)
+        sys.exit(2)
 
     main(args)
