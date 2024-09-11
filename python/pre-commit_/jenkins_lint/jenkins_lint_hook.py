@@ -73,11 +73,16 @@ def main(args):
 if __name__ == "__main__":
     args = parser.parse_args()
 
-    if args.precommit_mode and not "JENKINS_AUTH" in os.environ:
-        # NOTE:pre-commit does not give us a way to skip a hook or run it conditionally, so instead
-        # we exit with code 0 and print as obvious a warning as we can
-        print(f"{ANSI_BOLD}{ANSI_YELLOW}JENKINS_AUTH is not set, skipping Jenkins linter check{ANSI_RESET}")
-        sys.exit(0)
+    if args.precommit_mode:
+        if args.username or args.token:
+            print(f"{ANSI_BOLD}{ANSI_RED}Must not use --username/--token with --precommit-mode, use JENKINS_AUTH instead{ANSI_RESET}")
+            sys.exit(2)
+
+        if "JENKINS_AUTH" not in os.environ:
+            # NOTE:pre-commit does not give us a way to skip a hook or run it conditionally, so instead
+            # we exit with code 0 and print as obvious a warning as we can
+            print(f"{ANSI_BOLD}{ANSI_YELLOW}JENKINS_AUTH is not set, skipping Jenkins linter check{ANSI_RESET}")
+            sys.exit(0)
 
     if args.username and args.token:
         # CLI specified username and token explicitly, nothing further required
