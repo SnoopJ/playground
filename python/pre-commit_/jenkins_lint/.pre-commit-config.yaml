@@ -6,6 +6,9 @@ repos:
     hooks:
     -   id: jenkins-lint
         name: Lint Jenkinsfile(s)
+        # NOTE:possible improvement here is to make the hook pip installable and use language:python
+        # This would provide an isolated venv and fuss-free installation of requests, but it's more work than I'm
+        # willing to put into this at the moment.
         language: script
         types: [jenkins]
         entry: jenkins_lint_hook.py
