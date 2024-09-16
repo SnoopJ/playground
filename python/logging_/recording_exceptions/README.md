@@ -9,7 +9,6 @@ to add exception information to a logging message.
 $ python3 main.py
 INFO:__main__:A regular old logging message
 ERROR:root:An error occurred exc_info=False
-12:33 [snoopjedi@denton ~/playground/python/logging_/recording_exceptions (main *+)]
 ```
 
 ### With `exc_info`
