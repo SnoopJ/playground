@@ -17,3 +17,6 @@ cffiwhat = "cffiwhat.__main__:main"
 
 [project.urls]
 Home = "https://github.com/ali1234/cffiwhat"
+
+[tool.setuptools.dynamic]
+version = {attr = "cffiwhat.__version__"}
