@@ -5,18 +5,18 @@ from unittest.mock import Mock, patch
 from lib import orchestrate
 
 
-class MockExpensive:
+class FakeExpensive:
     def __init__(self):
         self.numcalls = 0
 
     def __call__(self) -> str:
         time.sleep(1)
         self.numcalls += 1
-        return "fake expensive() return"
+        return "FAKE expensive() done"
 
 
 def test_orchestrate():
-    mock_exp = MockExpensive()
+    fake_exp = FakeExpensive()
 
     ref_time = datetime.now()
     expensive_dt = timedelta(hours=1)
@@ -34,7 +34,7 @@ def test_orchestrate():
     mock_datetime = Mock(now=mock_now)
 
     with (
-        patch("lib.expensive_func", mock_exp),
+        patch("lib.expensive_func", fake_exp),
         patch("datetime.datetime", mock_datetime)
     ):
         max_time = timedelta(hours=3)
