@@ -7,7 +7,6 @@ name = "cffiwhat"
 authors = [{name = "Alistair Buxton", email = "a.j.buxton@gmail.com"}]
 license = {file = "LICENSE"}
 classifiers = ["License :: OSI Approved :: MIT License"]
-description = "cffiwhat"
 dynamic = ["version"]
 dependencies = [
     "cffi"
