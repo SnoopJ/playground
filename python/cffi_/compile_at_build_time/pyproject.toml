@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools", "cffi"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cffiwhat"
+authors = [{name = "Alistair Buxton", email = "a.j.buxton@gmail.com"}]
+license = {file = "LICENSE"}
+classifiers = ["License :: OSI Approved :: MIT License"]
+description = "cffiwhat"
+dynamic = ["version"]
+dependencies = [
+    "cffi"
+]
+
+[project.scripts]
+cffiwhat = "cffiwhat.__main__:main"
+
+[project.urls]
+Home = "https://github.com/ali1234/cffiwhat"
