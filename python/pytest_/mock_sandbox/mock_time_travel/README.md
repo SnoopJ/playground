@@ -21,12 +21,12 @@ test_lib.py::test_orchestrate PASSED                                        [100
 ===================================== PASSES ======================================
 ________________________________ test_orchestrate _________________________________
 ------------------------------ Captured stdout call -------------------------------
-[2024-10-07T16:52:42.875751] cheap computation done
-[2024-10-07T17:52:43.882272] FAKE expensive() done
-[2024-10-07T17:52:44.886276] cheap computation done
-[2024-10-07T18:52:45.892727] FAKE expensive() done
-[2024-10-07T18:52:46.894637] cheap computation done
-[2024-10-07T19:52:47.896945] FAKE expensive() done
+[17:20:28.590265] cheap computation done
+[18:20:29.591940] FAKE expensive() done
+[18:20:30.594032] cheap computation done
+[19:20:31.597821] FAKE expensive() done
+[19:20:32.600301] cheap computation done
+[20:20:33.603090] FAKE expensive() done
 Time limit reached (3:00:00), terminating loop early
-================================ 1 passed in 6.11s ================================
+================================ 1 passed in 6.09s ================================
 ```

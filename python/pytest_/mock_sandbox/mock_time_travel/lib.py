@@ -5,27 +5,29 @@ import time
 HOUR = 60*60  # in sec
 
 
-def cheap_func() -> str:
-    time.sleep(1)
-    return "cheap computation done"
+class Something:
+    def cheap_func(self) -> str:
+        time.sleep(1)
+        return "cheap computation done"
 
-
-def expensive_func() -> str:
-    time.sleep(1*HOUR)
-    return "expensive computation done"
+    def expensive_func(self) -> str:
+        time.sleep(1*HOUR)
+        return "expensive computation done"
 
 
 def orchestrate(Niter: int, max_time: datetime.timedelta):
     start = datetime.datetime.now()
 
     for n in range(Niter):
+        instance = Something()
+
         if (n % 2) == 0:
-            msg = cheap_func()
+            msg = instance.cheap_func()
         else:
-            msg = expensive_func()
+            msg = instance.expensive_func()
 
         now = datetime.datetime.now()
-        print(f"[{now.isoformat()}] {msg}")
+        print(f"[{now.time()}] {msg}")
 
         if (now - start) >= max_time:
             print(f"Time limit reached ({max_time}), terminating loop early")
