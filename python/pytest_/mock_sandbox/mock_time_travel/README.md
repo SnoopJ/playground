@@ -2,6 +2,9 @@ This example shows using a stateful fake object to perform "time travel" when
 mocking an expensive function, advancing the observed clock by a fixed amount
 (in this case, an hour) each time the mocked-away expensive function is called.
 
+The target expensive function is an instance method, but the "time travel"
+applies across all instances created for the duration of the test.
+
 I wrote this example because I have some 'real' code that has similar structure
 to this sample (where individual functions are brought togther in an orchestration
 function) and I want to write tests for a time-budgeting feature similar to the
