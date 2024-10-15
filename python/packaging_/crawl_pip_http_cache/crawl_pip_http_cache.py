@@ -32,7 +32,7 @@ def cached_packages(cache_dir: Path):
             metadata = zf.read(metadata_file_entry).decode().splitlines()
             pkg_name = next(line for line in metadata if line.startswith("Name: ")).removeprefix("Name: ")
             pkg_version = next(line for line in metadata if line.startswith("Version: ")).removeprefix("Version: ")
-            yield (pkg_name, pkg_version)
+            yield (pkg_name, pkg_version, pth)
         except BadZipFile as exc:
             # not a zip file, move on
             continue
@@ -42,12 +42,14 @@ if __name__ == "__main__":
     logging.basicConfig()
 
     pkgs = sorted(cached_packages(PIP_CACHE))
-
     if not pkgs:
         print("Cannot find pre-built wheels in pip HTTP cache")
         sys.exit(0)
 
+    formatted_pkgs = [(f"{name}=={ver}", pth) for name, ver, pth in pkgs]
+    pad_width = max(len(req) for req, pth in formatted_pkgs) + 3
+
     print("\nFound wheels in pip HTTP cache:")
     print("-------------------------------")
-    for (pkg_name, pkg_version) in pkgs:
-        print(f"{pkg_name}=={pkg_version}")
+    for (req, pth) in formatted_pkgs:
+        print(f"{req: >{pad_width}}  {pth}")
