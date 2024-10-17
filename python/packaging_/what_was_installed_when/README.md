@@ -8,6 +8,8 @@ file, which is a decent proxy for when the distribution was installed.
 $ python3 what_was_installed_when.py
 Installation history
 --------------------
+astpretty==2.1.0                     installed 2022-01-20 at 23:37
+mpmath==1.2.1                        installed 2022-02-23 at 17:28
 setuptools==58.1.0                   installed 2024-06-04 at 14:41
 pip==22.0.4                          installed 2024-06-04 at 14:41
 altgraph==0.17.4                     installed 2024-06-04 at 14:42
@@ -53,4 +55,5 @@ toml==0.10.2                         installed 2024-10-17 at 11:04
 python-magic==0.4.27                 installed 2024-10-17 at 11:04
 click==7.1.2                         installed 2024-10-17 at 11:04
 steck==0.7.0                         installed 2024-10-17 at 11:04
+opencv-python==4.10.0.84             installed 2024-10-17 at 18:14
 ```

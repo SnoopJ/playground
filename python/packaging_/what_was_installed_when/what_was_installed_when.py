@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 if __name__ == "__main__":
     logging.basicConfig()
 
-    site_paths = (Path(entry) for entry in chain(site.getsitepackages(), site.getusersitepackages()))
+    site_paths = [Path(entry) for entry in (*site.getsitepackages(), site.getusersitepackages())]
     gen = chain.from_iterable(pth.glob("*.dist-info/INSTALLER") for pth in site_paths)
     installer_files = sorted(gen, key=lambda pth: pth.stat().st_ctime)
 
