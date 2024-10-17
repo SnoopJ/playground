@@ -1,4 +1,4 @@
-This program scans through the visible Python sites to find [`INSTALLER` files]()
+This program scans through the visible Python sites to find [`INSTALLER` files]
 and reports the associated distributions sorted by creation time of the `INSTALLER`
 file, which is a decent proxy for when the distribution was installed.
 
