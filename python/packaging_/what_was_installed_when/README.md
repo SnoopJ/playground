@@ -1,6 +1,6 @@
 This program scans through the visible Python sites to find [`INSTALLER` files]
-and reports the associated distributions sorted by creation time of the `INSTALLER`
-file, which is a decent proxy for when the distribution was installed.
+and reports the associated distributions sorted by filesystem metadata of the
+`INSTALLER` file, which is a decent proxy for when the distribution was installed.
 
 [`INSTALLER` files]: https://packaging.python.org/en/latest/specifications/recording-installed-packages/#the-installer-file
 

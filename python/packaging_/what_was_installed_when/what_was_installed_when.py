@@ -27,7 +27,12 @@ if __name__ == "__main__":
         pkg_name = next(line for line in metadata if line.startswith("Name: ")).removeprefix("Name: ")
         pkg_version = next(line for line in metadata if line.startswith("Version: ")).removeprefix("Version: ")
         req = f"{pkg_name}=={pkg_version}"
-        pkg_installed_time = datetime.fromtimestamp(pkg_installer_pth.stat().st_ctime)
+
+        installer_stat = pkg_installer_pth.stat()
+        # NOTE: st_ctime is deprecated in favor of st_birthtime on Windows, and st_birthtime will be more reliable
+        # in any case where it is available, but st_ctime is an acceptable fallback
+        reftime = getattr(installer_stat, "st_birthtime", installer_stat.st_ctime)
+        pkg_installed_time = datetime.fromtimestamp(reftime)
 
         pkginfo.append((req, pkg_installed_time))
 
