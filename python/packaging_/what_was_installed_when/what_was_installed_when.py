@@ -34,6 +34,9 @@ if __name__ == "__main__":
 
     pad_width = max(len(req) for req, _ in pkginfo) + 3
 
+    sites_report = "\n\t".join([str(pth) for pth in site_paths])
+    print(f"Found {len(site_paths)} sites:\n\t{sites_report}\n")
+
     print("Installation history")
     print("--------------------")
 

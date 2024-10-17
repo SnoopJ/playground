@@ -6,6 +6,10 @@ file, which is a decent proxy for when the distribution was installed.
 
 ```
 $ python3 what_was_installed_when.py
+Found 2 sites:
+        /var/lib/gitea/data/gitea-repositories/snoopj/playground.git/python/.direnv/python-3.9.16/lib/python3.9/site-packages
+        /home/snoopjedi/.local/lib/python3.9/site-packages
+
 Installation history
 --------------------
 astpretty==2.1.0                     installed 2022-01-20 at 23:37
