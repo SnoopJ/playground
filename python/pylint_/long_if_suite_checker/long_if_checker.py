@@ -74,9 +74,6 @@ class LongIfChecker(BaseChecker):
                     node=n,
                     confidence=HIGH,
                 )
-#         print(f"=== If ===")
-#         print(f"{self._suite_extents(node) = }")
-#         print("===\n")
 
 
 def register(linter: "PyLinter") -> None:
