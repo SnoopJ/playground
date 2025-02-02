@@ -22,6 +22,9 @@ class IdentifierType(IntEnum):
 
     @classmethod
     def of(cls, value: str):
+        if value.isspace() or value in ".,;#":
+            return cls.INVALID
+
         XIDStart_src = f"{value} = 42  # if this compiles, c is a valid identifier (XID_Start)"
         XIDContinue_src = f"_{value} = -1  # if this compiles, c is a valid identifier (XID_Continue)"
 
