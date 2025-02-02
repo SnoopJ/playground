@@ -3,7 +3,11 @@ import unicodedata
 from collections import defaultdict
 from enum import IntEnum
 
-from tqdm import tqdm
+try:
+    from tqdm import tqdm
+except ImportError:
+    def tqdm(it, *args, **kwargs):
+        yield from it
 
 # sample output:
 # $ python3.13 valid_identifiers.py
