@@ -16,10 +16,10 @@ Bark bark! I'm otherlib running from __file__ = 'otherlib.zip/otherlib.py'
 
 $ python3 manual_main.py
 > Source listing of module otherlib from otherlib.zip
-```python
+\`\`\`python
     def bark():
         print(f"Bark bark! I'm otherlib running from {__file__ = }")
-```
+\`\`\`
 > Importing otherlib
 > Running otherlib.bark()
 Bark bark! I'm otherlib running from __file__ = 'otherlib.zip/otherlib.py'
