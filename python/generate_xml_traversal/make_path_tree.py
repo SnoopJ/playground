@@ -27,7 +27,7 @@ def make_path_tree():
             child = nxt.joinpath(name)
 
             if random.random() < PROB_CHILD_DIR:
-                print(f"Creating dir: {child!s}")
+                print(f"Creating dir:  {child!s}")
                 child.mkdir()
                 pending.append(child)
             else:
