@@ -13,10 +13,6 @@ def _gather_tree(root: Path, bundle_root: Path, depth: int = 0) -> Iterable[str]
     INDENT = 4*" " * depth
 
     for pth in root.iterdir():
-        # ignore . and ..
-        if pth.samefile(root):
-            continue
-
         if pth.is_dir():
             yield f'{INDENT}<Directory Name="{pth.name}">'
             # descend
