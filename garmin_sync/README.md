@@ -2,11 +2,23 @@ This is an example `systemd` service and Python program for automatically
 copying `.FIT` files from a Garmin smartwatch, then drawing the recorded GPS
 tracks over corresponding map tile from OpenStreetMap.
 
+In addition to some miscellaneous Python libraries (see `requirements.txt`),
+this program also uses the official [Garmin FIT SDK for Python] to interact with the `.FIT`
+files¹.
+
+[Garmin FIT SDK for Python]: https://pypi.org/project/garmin-fit-sdk/
+
 **NOTE**: This configuration assumes that you have exactly one Garmin
 smartwatch device, that it is mounted to the same location every time, and
 that `systemd` is responsible for mounts on the system. It also assumes the
 presence of Python 3.9 or higher and the dependencies listed in
 `requirements.txt`.
+
+¹ I have made assumptions about what's in the file based on my own personal
+needs, you may find that you need more sophisticated processing. I recommend
+looking through the [Garmin examples] for deeper insight into the `FIT` format
+
+[Garmin examples]: https://developer.garmin.com/fit/example-projects/
 
 ## Usage
 
