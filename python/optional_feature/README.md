@@ -21,4 +21,17 @@ Traceback (most recent call last):
     import somelib
 ModuleNotFoundError: No module named 'somelib'
 INFO:root:OK
+
+$ python3 -m optional_feature --use-somelib
+WARNING:optional_feature.somelib_facade:somelib is not available, functionality will be degraded
+Traceback (most recent call last):
+  File "/home/snoopjedi/.pyenv/versions/3.9.16/lib/python3.9/runpy.py", line 197, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/home/snoopjedi/.pyenv/versions/3.9.16/lib/python3.9/runpy.py", line 87, in _run_code
+    exec(code, run_globals)
+  File "/var/lib/gitea/data/gitea-repositories/snoopj/playground.git/python/optional_feature/__main__.py", line 3, in <module>
+    main()
+  File "/var/lib/gitea/data/gitea-repositories/snoopj/playground.git/python/optional_feature/main.py", line 24, in main
+    raise FeatureUnavailable("somelib requested, but not available")
+optional_feature.main.FeatureUnavailable: somelib requested, but not available
 ```
