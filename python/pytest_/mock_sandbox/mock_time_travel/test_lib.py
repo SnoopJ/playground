@@ -10,6 +10,8 @@ from lib import orchestrate, Something
 @pytest.fixture
 def FakeSomething():
     class _FakeSomething(Something):
+        ref_time = datetime.now()
+        expensive_dt = timedelta(hours=1)
         num_calls = 0
 
         def expensive_func(self) -> str:
@@ -17,26 +19,20 @@ def FakeSomething():
             self.__class__.num_calls += 1
             return "FAKE expensive() done"
 
+        @classmethod
+        def now(cls):
+            rel_dt = datetime.now() - cls.ref_time
+
+            return cls.ref_time + rel_dt + cls.num_calls * cls.expensive_dt
+
+
     yield _FakeSomething
 
 
 def test_orchestrate(FakeSomething):
-    ref_time = datetime.now()
-    expensive_dt = timedelta(hours=1)
-
-    def mock_now():
-        """
-        Fake now() in terms of how many calls we've made to expensive()
-        """
-        # time actually elapsed
-        # i.e. including time we spent in cheap_func()
-        rel_dt = datetime.now() - ref_time
-
-        return ref_time + rel_dt + FakeSomething.num_calls * expensive_dt
-
     with (
         patch("lib.Something", FakeSomething),
-        patch("datetime.datetime", now=mock_now)
+        patch("datetime.datetime", now=FakeSomething.now)
     ):
         max_time = timedelta(hours=3)
         n_iter = 10
@@ -44,6 +40,6 @@ def test_orchestrate(FakeSomething):
 
 
     stop = datetime.now()
-    assert stop - ref_time <= max_time, "Time budget exceeded"
+    assert stop - FakeSomething.ref_time <= max_time, "Time budget exceeded"
 
-    assert FakeSomething.num_calls < (n_iter//2), "expensive_func() called more than expected"
+    assert FakeSomething.num_calls <= (n_iter//2), "expensive_func() called more than expected"

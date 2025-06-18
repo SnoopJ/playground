@@ -17,6 +17,22 @@ def drop_local_from_req(req: Requirement) -> Requirement:
         ns = Specifier(spec.operator + newver)
         newspecs.append(ns)
 
+    # I regret to say that mutation of a `Requirement` object is the solution
+    # to this problem with which I am most satisfied.
+    #
+    # Unfortunately, the official `packaging` API does not provide very good
+    # primitives for this, you end up routing through `str` a bunch of times
+    # (see silly copy idiom above). If it were possible to create a `Specifier`
+    # like:
+    #
+    #     Specifier(operator="==", version="1.2.3")
+    #
+    # and a `Requirement` like:
+    #
+    #     Requirement(name="pkg", specifier=specifier, extras=…, markers=…)
+    #
+    # then this could be written in a way I find much more satisfying. But as it
+    # stands, this is the best I can do.
     result.specifier = SpecifierSet(','.join(map(str, newspecs)))
 
     return result

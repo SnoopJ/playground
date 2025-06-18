@@ -19,7 +19,7 @@ def main(args):
     logger.info("A regular old logging message")
     try:
         failing_function()
-    except:
+    except Exception as exc:
         logging.exception("An error occurred exc_info=%r", args.exc_info, exc_info=args.exc_info)
 
 

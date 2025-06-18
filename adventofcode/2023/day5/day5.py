@@ -4,7 +4,7 @@ import logging
 import sys
 from dataclasses import dataclass
 from functools import total_ordering
-from typing import NamedTuple
+from itertools import batched, chain
 
 import click
 
@@ -20,11 +20,14 @@ class Range:
     dst_start: int
     length: int
 
-    def __contains__(self, val: int):
-        return self.src_start <= val <= self.src_start + self.length
+    def __contains__(self, val: int | range):
+        if isinstance(val, range):
+            val = val.start
+
+        return self.src_start <= val <= self.src_start + self.length - 1
 
     def __lt__(self, other: Range | int):
-        if isinstance(other, Range):
+        if isinstance(other, (Range, range)):
             return self.src_start < other.src_start
         elif isinstance(other, int):
             return self.src_start < other
@@ -43,7 +46,7 @@ class SubMap:
     dst: str
     ranges: list[RANGE]
 
-    def __getitem__(self, num) -> int:
+    def _get_int(self, num: int) -> int:
         if num < self.ranges[0].src_start:
             # fast path: all ranges start above this number, it cannot be a member of one
             return num
@@ -56,6 +59,43 @@ class SubMap:
             LOGGER.debug("Num %r is in %r range %r", num, self.dst, rnge)
             return rnge.dst_start + (num - rnge.src_start)
 
+    def _get_range(self, rnge: range) -> list[range]:
+        result = []
+
+        for test_rnge in self.ranges:
+            if rnge in test_rnge:
+                # TODO: this is broken :(
+                LOGGER.debug("Range %r is subset of %r range %r", rnge, self.dst, test_rnge)
+                test_end = test_rnge.src_start + test_rnge.length
+                offset = rnge.start - test_rnge.src_start
+                start = test_rnge.dst_start + offset
+                if test_end >= rnge.stop:
+                    # we've consumed the entire range
+                    stop = rnge.stop
+                    rnge = None
+                else:
+                    # we need to split the range
+                    stop = test_end
+                    rnge = range(test_end + 1, rnge.stop)
+                result.append(range(start, stop))
+            else:
+                result.append(rnge)
+                rnge = None
+
+            if rnge is None:
+                break
+
+        return result
+
+        raise NotImplementedError
+
+    def __getitem__(self, key):
+        if isinstance(key, int):
+            return self._get_int(key)
+        elif isinstance(key, range):
+            return self._get_range(key)
+        else:
+            raise KeyError(f"Key must be of type int or range, got {type(key)!r}")
 
     @classmethod
     def from_lines(cls, lines: list[str]):
@@ -136,15 +176,18 @@ def main(input, debug):
 
     with open(input, "r") as f:
         seed_line, *rest = f
-        seeds = [int(snum) for snum in seed_line.split()[1:]]
-        LOGGER.debug("seeds: %s\n", seeds)
+        seedspec = [int(snum) for snum in seed_line.split()[1:]]
+        LOGGER.debug("seedspec: %s\n", seedspec)
 
         map = Map.from_lines(rest)
 
-    ans1 = min(map.location(seednum) for seednum in seeds)
+    ans1 = min(map.location(seednum) for seednum in seedspec)
     print(f"Part 1: {ans1}")
 
-#     ans2 = another_miracle_occurs(lines)
+    seeds = list(chain(range(start, start+num) for start, num in batched(seedspec, n=2)))
+    map.location(seeds[0])
+    # TODO: linear scan here is too much, need to be able to do the lookup in terms of ranges
+#     ans2 = min(map.location(seednum) for seednum in seeds)
 #     print(f"Part 2: {ans2}")
 
 

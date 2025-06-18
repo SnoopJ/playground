@@ -38,16 +38,18 @@ def _reqgroups_from_file(fn) -> list[RequirementGroup]:
 
         # ASSUME: all requirements lines use == (i.e. we're not handling <=, >=, ~=, !=, etc.)
         if "==" in line:
+            r = line.rstrip("\\")
+
             if req is None:
                 # edge case: first requirement in file
-                req = Requirement(line)
+                req = Requirement(r)
             else:
                 # otherwise, we just moved from one requirement to another, time to add the current requirement
                 # and its inducers to the output
                 grp = req, tuple(inducers)
                 results.append(grp)
 
-                req = Requirement(line)
+                req = Requirement(r)
                 inducers.clear()
         else:
             # we're in the section after a requirement that tells us (via comments) what induced this requirement
@@ -58,6 +60,8 @@ def _reqgroups_from_file(fn) -> list[RequirementGroup]:
                 if not ind:
                     # not a single-line inducer, list follows, we ignore the separating line
                     continue
+            elif not line.startswith("#"):
+                # a --hash line or some other continuation of the requirement line that is not part of the Requirement
             else:
                 # the line we're on is part of a list of multiple packages preceded by a `# via` line
                 ind = line.removeprefix("#").lstrip().replace("(pyproject.toml)", "")
