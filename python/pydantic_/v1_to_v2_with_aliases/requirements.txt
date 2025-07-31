@@ -1,0 +1,3 @@
+# NOTE: this behavior shows up in other versions, but these are the ones I was using when I blundered across the naughty behavior
+pydantic==2.11.7
+pydantic-settings==2.10.1
