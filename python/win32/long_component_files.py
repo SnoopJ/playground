@@ -6,6 +6,7 @@ from tempfile import TemporaryDirectory
 
 kernel32 = ctypes.windll.kernel32
 
+# https://learn.microsoft.com/en-us/windows/win32/api/FileAPI/nf-fileapi-getvolumeinformationa
 kernel32.GetVolumeInformationA.argtypes = w.LPCSTR, w.LPSTR, w.DWORD, w.LPDWORD, w.LPDWORD, w.LPDWORD, w.LPSTR, w.DWORD
 kernel32.GetVolumeInformationA.restype = w.BOOL
 
