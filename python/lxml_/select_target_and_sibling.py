@@ -31,19 +31,29 @@ import lxml.html
 # predicate formed form it is quite large
 TARGET_IDS = ["target", "other_target"]
 ID_PREDICATE = " or ".join(f'@id="{tid}"' for tid in TARGET_IDS)
+
+# NOTE: on Wiktionary, the heading level used for the part of speech is not
+# consistent between terms, so the general solution selects *any* heading
+# level with the target ID
+#
+# thanks to Stack Overflow user Dimitre Novatchev for the hint about how to
+# match multiple tags without taking the union of multiple nodesets
+# https://stackoverflow.com/a/722251
+TAG_PREDICATE = " or ".join(f"self::h{n}" for n in range(1, 7))
+
+COMBINED_PREDICATE = f"({TAG_PREDICATE}) and ({ID_PREDICATE})"
+
 # NOTE: we can grab the target <div> and its sibling <span> by constructing an
 # expression using XPath's union operator '|'
 # see: https://www.w3.org/TR/1999/REC-xpath-19991116/#node-sets
-DEFN_XPATH = f".//h4[{ID_PREDICATE}]/.. | .//h4[{ID_PREDICATE}]/../following-sibling::span"
-# NOTE: in the 'real' Wiktionary problem, the heading level is not reliable, so the XPath expression is even
-# more complicated, but that detail has been elided here
+DEFN_XPATH = f".//*[{COMBINED_PREDICATE}]/.. | .//*[{COMBINED_PREDICATE}]/../following-sibling::span"
 
 DUMMY_DOC = """\
 <html>
 <body>
     <div><h4 id="target">Target #1</h4></div>
     <span>actual text target</span>
-    <div><h4 id="other_target">Target #2</h4></div>
+    <div><h3 id="other_target">Target #2</h4></div>
     <span>another text target</span>
 </body>
 </html>
