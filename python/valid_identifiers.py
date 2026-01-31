@@ -1,11 +1,21 @@
+import argparse
+import logging
 import sys
 import unicodedata
 from collections import defaultdict
 from enum import IntEnum
 
+LOGGER = logging.getLogger(__name__)
+
+parser = argparse.ArgumentParser(description="Infer Python identifier rules")
+parser.add_argument("--verbose", action="store_true", help="Emit (lots of!) diagnostic information if set")
+
+
+
 try:
     from tqdm import tqdm
 except ImportError:
+    LOGGER.warning("tqdm is not available, no progress bar will be available")
     def tqdm(it, *args, **kwargs):
         yield from it
 
@@ -48,6 +58,14 @@ class IdentifierType(IntEnum):
 
 
 if __name__ == "__main__":
+    args = parser.parse_args()
+    if args.verbose:
+        loglvl = logging.DEBUG
+    else:
+        loglvl = logging.WARNING
+
+    logging.basicConfig(level=loglvl)
+
     print(sys.version)
     print(f"{unicodedata.unidata_version = }")
     results = []
