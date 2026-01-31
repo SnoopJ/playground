@@ -39,7 +39,13 @@ class IdentifierType(StrEnum):
     @classmethod
     def of(cls, value: str):
         if value.isspace() or value in ".,;#":
+            # Special syntactical meaning, we already know these cannot be in identifiers
             return cls.INVALID
+
+        if value == '_':
+            # NOTE:to my knowledge, the one thing Python tweaks from the default ruleset is to
+            # allow U+5F LOW LINE to start an identifier (it is XID_Continue by default)
+            return cls.XID_CONTINUE
 
         XIDStart_src = f"{value} = 42  # if this compiles, c is a valid identifier (XID_Start)"
         XIDContinue_src = f"_{value} = -1  # if this compiles, c is a valid identifier (XID_Continue)"
