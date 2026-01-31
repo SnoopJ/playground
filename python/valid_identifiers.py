@@ -16,6 +16,9 @@ try:
 except ImportError:
     LOGGER.warning("tqdm is not available, no progress bar will be available")
     def tqdm(it, *args, **kwargs):
+        desc = kwargs.get("desc", None)
+        if desc:
+            print(desc)
         yield from it
 
 # sample output:
