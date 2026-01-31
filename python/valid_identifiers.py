@@ -16,6 +16,7 @@ sample output (with optional dependency tqdm installed):
 """
 import argparse
 import logging
+import re
 import sys
 import unicodedata
 from collections import defaultdict
@@ -121,7 +122,26 @@ class UcdFile:
             yield char
 
 
+# NOTE: as far as I can tell, UAX #44 does NOT require the version in the first
+# line (or indeed, the header itself at all), but the convention is followed for
+# all files except Index.txt
+CORE_FILE_PATT = r"DerivedCoreProperties-(?P<UCDVersion>\d+\.\d+\.\d+)\.txt"
+def _check_file_ver(core_props_file: Path) -> None:
+    with open(core_props_file, "r") as f:
+        header = f.readline()
+        m = re.search(CORE_FILE_PATT, header)
+        if not m:
+            LOGGER.warning("File does not appear to be DerivedCoreProperties.txt from a UCD release, you will probably see errors. %s", core_props_file)
+        else:
+            filever = m.group("UCDVersion")
+            ourver = unicodedata.unidata_version
+            if filever != ourver:
+                LOGGER.warning("File is for Unicode version %s, this Python knows Unicode version %s, you are probably going to see discrepancies", filever, ourver)
+
+
 def uax31_classes(core_props_file: Path) -> list[IdentifierType]:
+    _check_file_ver(core_props_file)
+
     core_props = UcdFile(core_props_file)
     result = [IdentifierType.INVALID] * (sys.maxunicode+1)
 
