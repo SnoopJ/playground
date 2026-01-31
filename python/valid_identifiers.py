@@ -3,13 +3,12 @@ import logging
 import sys
 import unicodedata
 from collections import defaultdict
-from enum import IntEnum
+from enum import StrEnum
 
 LOGGER = logging.getLogger(__name__)
 
 parser = argparse.ArgumentParser(description="Infer Python identifier rules")
 parser.add_argument("--verbose", action="store_true", help="Emit (lots of!) diagnostic information if set")
-
 
 
 try:
@@ -29,10 +28,10 @@ except ImportError:
 # XID_CONTINUE: 3149
 
 
-class IdentifierType(IntEnum):
-    INVALID = 0
-    XID_START = 1
-    XID_CONTINUE = 2
+class IdentifierType(StrEnum):
+    INVALID = "INVALID"
+    XID_START = "XID_Start"
+    XID_CONTINUE = "XID_Continue"
 
     @classmethod
     def of(cls, value: str):
