@@ -1,6 +1,8 @@
 from pprint import pprint
+from typing import Callable, Optional
 
 from glom import *
+
 
 data = {
         "foo object": {
@@ -17,7 +19,6 @@ data = {
         },
 }
 
-from typing import Callable, Optional
 
 class RenameKeys:
     def __init__(self, fn: Optional[Callable[[str], str]]=None, **kwargs: str):
@@ -30,6 +31,7 @@ class RenameKeys:
             return {self._fn(k):self.glomit(v, scope) for k,v in target.items()}
         else:
             return target
+
 
 if __name__ == "__main__":
     spec = Switch({
