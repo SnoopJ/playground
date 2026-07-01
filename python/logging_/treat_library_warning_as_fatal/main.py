@@ -38,7 +38,7 @@ class PromotionFilter(logging.Filter):
 
 def main(args):
     if args.promote_collection_warnings:
-        promotion_filter = PromotionFilter(levelno=logging.WARNING, message_pattern=".*not a package.*")
+        promotion_filter = PromotionFilter(levelno=logging.WARNING, message_pattern=r".*not a package.*")
         # NOTE:if the Filter is attached to a specific Logger, it applies only to records created by *that* logger
         # If the filter should instead apply to messages at multiple levels in a hierarchy, it should probably be
         # attached to the relevant handler(s), or to any logger to which it should apply
